@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>yupihomepage</title>
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif; 
+        background-image: url(YUPi_register.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        margin-bottom: 100px;
+    }
+
+    .logo{
+      margin-left: -150px;
+
+    }
+    .logo img {
+        width: 80px; 
+    }
+
+    .navigation-bar {
+        background-color: #14533c; 
+        height: 80px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #navigation-container {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+    }
+
+    .container {
+        width:fit-content;
+        margin: 50px 20px 50px auto;
+        margin-right: 100px;
+        background-color: #f8dd8aa1;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        float: right;
+        margin-top: 90px;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    form {
+        margin-top: 5px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 2px solid #871d1d;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .button-container{
+      margin-top: 20px; 
+      text-align: center; 
+      
+    }
+    button,
+    a.cancel {
+      width: 200px;
+      padding: 10px;
+      background-color: #08542a; 
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 15px;
+      margin: 0 10px; 
+    }
+
+    button:hover,
+    a.cancel:hover {
+      background-color: #b11e2a;
+    }
+
+    a.cancel {
+      background-color: #08542a; 
+      text-decoration: none; 
+      display: inline-block;
+      width: 200px;
+    }
+   
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .form-group:last-child {
+        margin-right: 0;
+    }
+  </style>
+</head> 
+<body>
+  <div class="navigation-bar">
+    <div id="navigation-container">
+      <div class="logo">
+        <img src="yupilogo.png">
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Student Registration</h2>
+    <form action="register.php" method="post">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstname">First Name:</label>
+          <input type="text" id="firstname" name="firstname" required>
+        </div>
+        <div class="form-group">
+          <label for="middlename">Middle Name:</label>
+          <input type="text" id="middlename" name="middlename" required>
+        </div>
+        <div class="form-group">
+          <label for="lastname">Last Name:</label>
+          <input type="text" id="lastname" name="lastname" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="studentnumber">Student Number:</label>
+          <input type="text" id="studentnumber" name="studentnumber" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+      </div>
+      <label for="college">College/Department:</label>
+      <select id="college" name="college" required>
+        <option value="">Select College/Department</option>
+          <option value="science_mathematics">College of Science and Mathematics</option>
+          <option value="human_kinetics">Department of Human Kinetics</option>
+          <option value="school_management">School of Management</option>
+          <option value="humanities_socialsciences">College of Humanities and Social Sciences</option>
+      </select><br>    
+
+          <label for="program">Program/Course:</label>
+        <select id="program" name="program" required>
+          <option value="">Select Program/Course</option>
+            <optgroup label="College of Humanities and Social Sciences">
+              <option value="bs_anthropology">BS Anthropology</option>
+              <option value="bs_architecture">BS Architecture</option>
+              <option value="ba_communication_media_arts">BA Communication and Media Arts</option>
+              <option value="ba_english">BA English</option>
+              <option value="diploma_exercise_sports_science">Diploma in Exercise and Sports Science</option>
+              <option value="diploma_master_urban_regional_planning">Diploma/Master in Urban and Regional Planning</option>
+              <option value="bs_sports_science">Bachelor of Sports Science</option>
+              <option value="associate_arts_sports_studies">Associate in Arts in Sports Studies</option>
+              <option value="human_movement_science">MA Human Movement Science</option>
+          </optgroup>
+          <optgroup label="College of Science and Mathematics">
+            <option value="bs_applied_mathematics">BS Applied Mathematics</option>
+            <option value="bs_biology">BS Biology</option>
+            <option value="bs_computer_science">BS Computer Science</option>
+            <option value="bs_food_technology">BS Food Technology</option>
+            <option value="bs_data_science">BS Data Science</option>
+            <option value="ms_food_science">MS Food Science</option>
+          </optgroup>
+          <optgroup label="School of Management">
+            <option value="bs_agribusiness_economics">BS Agribusiness Economics</option>
+            <option value="master_management">Master in Management</option>
+            <option value="phd_research">PhD by Research</option>
+          </optgroup>
+        </select><br>  
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required><br>
+
+      <div class="button-container">
+        <a href="index.html" class="cancel">Cancel</a>
+        <button type="submit">Register</button>
+      </div>
+      
+    </form>    
+  </div>
+</body>
+</html>
