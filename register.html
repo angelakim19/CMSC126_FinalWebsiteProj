@@ -124,6 +124,19 @@
         margin-right: 0;
     }
   </style>
+  <script>
+    function validateForm() {
+      const studentNumber = document.getElementById('studentnumber').value;
+      const studentNumberPattern = /^\d{4}-\d{5}$/;
+
+      if (!studentNumberPattern.test(studentNumber)) {
+        alert('Student Number must be in the format XXXX-XXXXX.');
+        return false;
+      }
+
+      return true;
+    }
+  </script>
 </head> 
 <body>
   <div class="navigation-bar">
