@@ -15,9 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Database connection
-    $servername = "localhost"; // Use IP address instead of localhost
-    $username = "root"; // Corrected the variable name
-    $password = "your_password"; // Ensure this is your actual MariaDB root password
+    $servername = "localhost"; 
+    $username = "root"; 
+    $password = "your_password"; 
     $dbname = "registration_db";
 
     // Create connection
@@ -40,7 +40,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($stmt->execute()) {
-        echo "New record created successfully";
+        $_SESSION['firstname'] = $firstname;
+        $_SESSION['lastname'] = $lastname;
+        $_SESSION['studentnumber'] = $studentnumber;
+
+        header("Location: rgtrlandingpage.php");
+        exit;
     } else {
         echo "Execute failed: " . $stmt->error;
     }
@@ -48,13 +53,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
     $conn->close();
 
-    // After successfully inserting data into the database
-    $_SESSION['firstname'] = $firstname;
-    $_SESSION['lastname'] = $lastname;
-    $_SESSION['studentnumber'] = $studentnumber;
-
-    // Redirect to the landing page
-    header("Location: rgtrlandingpage.html");
-    exit;
 }
 ?>
