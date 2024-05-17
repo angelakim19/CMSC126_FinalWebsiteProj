@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUPI Admin Panel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Titan+One&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #fbc130; /* Set the same background color as the container */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            background-color: #fbc130;
+        }
+
+        header {
+            background-color: #007b70;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: flex-start;
+        }
+
+        .logo {
+            width: 70px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .title-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            height: 100%;
+            margin-top: -10%;
+            margin-left: 10%;
+            max-width: 50%;
+        }
+
+        h1 {
+            font-size: 350px; /* Adjusted to match the image */
+            color: #000;
+            margin: 0;
+            font-family: 'Titan One', cursive;
+        }
+
+        h2 {
+            font-size: 40px; /* Adjusted to match the image */
+            font-weight: lighter;
+            color: #000;
+            margin-right: 20px;
+            border-left: 10%;
+            padding-left: 100px;
+            margin: 10px 0 0 10px; /* Adjusted margin to match the image */
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .login-button {
+            background-color: #808080; /* Adjusted background color to match the image */
+            color: #000;
+            padding: 20px 80px; /* Increased padding to make the button wider */
+            border: 1px solid #000; /* Added border to match the image */
+            border-radius: 10px; /* Adjusted border-radius to match the image */
+            cursor: pointer;
+            font-size: 20px; /* Adjusted font size to match the image */
+            font-family: 'Open Sans', sans-serif; /* Set font family to Open Sans */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            right: 40px;
+            text-decoration: none;
+        }
+
+        .login-button:hover {
+            background-color: #555555;
+        }
+
+        .arrow {
+            font-size: 24px;
+            margin-left: 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="yupilogo.png" alt="YUPI Logo" class="logo">
+        </header>
+        <main>
+            <div class="title-container">
+                <h1>YUPI</h1>
+                <h2>ADMIN PANEL</h2>
+            </div>
+            <a href="login.html" class="login-button">LOG IN <span class="arrow"></span></a>
+        </main>
+    </div>
+</body>
+</html>

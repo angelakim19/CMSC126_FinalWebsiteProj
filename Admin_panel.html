@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUPI Admin Panel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Titan+One&family=Open+Sans:wght@400;700&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        header {
+            background-color: #007b70;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            width: 70px;
+            margin-right: 20px;
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            font-family: 'Titan One', cursive;
+            font-size: 36px;
+            color: #000;
+        }
+
+        .title span {
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100% - 80px);
+            background: url('UPLIB.jpg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 50px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .button, .button1 {
+            padding: 25px 70px;
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 0.05rem;
+            text-transform: uppercase;
+            border-radius: 25px;
+            box-shadow: -5px -5px 10px white, 5px 5px 10px rgba(0, 0, 0, 0.485);
+            background-color: rgb(218, 214, 214);
+            border: none;
+            cursor: pointer;
+            color: #000; /* Adjusted text color to black for contrast */
+            font-family: 'Open Sans', sans-serif;
+            text-align: center;
+            text-decoration: none; /* Remove underline from link */
+        }
+
+        .button {
+            background-color: #808080;
+        }
+        .button1 {
+            background-color: #d3d3d3;
+        }
+
+        .button:hover, .button1:hover {
+            background-color: #555555;
+            color: #fff; /* Change text color to white on hover for better visibility */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="yupilogo.png" alt="YUPI Logo" class="logo">
+            <div class="title">
+                YUPI <span>ADMIN PANEL</span>
+            </div>
+        </header>
+        <div class="content">
+            <div class="button-container">
+                <a href="log_records.html" class="button">Log Records</a>
+                <a href="users_informations.html" class="button1">Users Informations</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

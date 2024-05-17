@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Records - YUPI Admin Panel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Titan+One&family=Open+Sans:wght@400;700&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #fbc130;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            background-color: #fbc130;
+        }
+
+        header {
+            background-color: #007b70;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            width: 70px;
+            margin-right: 20px;
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            font-family: 'Titan One', cursive;
+            font-size: 36px;
+            color: #000;
+        }
+
+        .title span {
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-family: 'Titan One', cursive;
+            font-size: 48px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .search-bar-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            box-shadow: -3px -3px 7px white, 3px 3px 7px rgba(0, 0, 0, 0.2);
+        }
+
+        .filter-button {
+            background-color: #808080;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Open Sans', sans-serif;
+            text-align: center;
+            box-shadow: -3px -3px 7px white, 3px 3px 7px rgba(0, 0, 0, 0.2);
+        }
+
+        .filter-button:hover {
+            background-color: #555555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: -5px -5px 10px white, 5px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007b70;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="yupilogo.png" alt="YUPI Logo" class="logo">
+            <div class="title">
+                YUPI <span>ADMIN PANEL</span>
+            </div>
+        </header>
+        <div class="content">
+            <div class="section-title">LOG RECORDS</div>
+            <div class="search-bar-container">
+                <input type="text" class="search-bar" onkeyup="filterTable()" placeholder="Search...">
+                <button class="filter-button" onclick="filterTable()">Filter</button>
+            </div>
+            <div>
+                <table id="logTable">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>ID Number</th>
+                            <th>Name</th>
+                            <th>College/Department</th>
+                            <th>Program</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Places Visited</th>
+                            <th>Position</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        include 'db.php';
+                        $sql = "SELECT * FROM log_records";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                echo "<tr>
+                                    <td><input type='checkbox'></td>
+                                    <td>{$row['id_number']}</td>
+                                    <td>{$row['name']}</td>
+                                    <td>{$row['college_department']}</td>
+                                    <td>{$row['program']}</td>
+                                    <td>{$row['time_in']}</td>
+                                    <td>{$row['time_out']}</td>
+                                    <td>{$row['places_visited']}</td>
+                                    <td>{$row['position']}</td>
+                                </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='9'>No records found</td></tr>";
+                        }
+                        $conn->close();
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        function filterTable() {
+            const searchInput = document.querySelector('.search-bar').value.toLowerCase();
+            const table = document.querySelector('#logTable tbody');
+            const rows = table.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let match = false;
+
+                cells.forEach(cell => {
+                    if (cell.textContent.toLowerCase().includes(searchInput)) {
+                        match = true;
+                    }
+                });
+
+                if (match) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
