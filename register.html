@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>yupihomepage</title>
+  <title>yupiregistrrationpage</title>
   <style>
     body {
         margin: 0;
@@ -135,7 +135,18 @@
       }
 
       return true;
+      
     }
+
+    window.onload = function() {
+      document.getElementById('register-form').addEventListener('submit', function(event) {
+        if (!validateForm()) {
+          event.preventDefault(); // Prevent form submission if validation fails
+        } else {
+          window.location.href = 'rgtrlandingpage.html'; 
+        }
+      });
+    };
   </script>
 </head> 
 <body>
@@ -178,9 +189,9 @@
       <select id="college" name="college" required>
         <option value="">Select College/Department</option>
           <option value="science_mathematics">College of Science and Mathematics</option>
+          <option value="humanities_socialsciences">College of Humanities and Social Sciences</option>
           <option value="human_kinetics">Department of Human Kinetics</option>
           <option value="school_management">School of Management</option>
-          <option value="humanities_socialsciences">College of Humanities and Social Sciences</option>
       </select><br>    
 
           <label for="program">Program/Course:</label>
