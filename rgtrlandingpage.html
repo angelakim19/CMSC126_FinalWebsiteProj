@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>yupiregistrationlandingpagepage</title>
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif; 
+        background-image: url(YUPi_register.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        margin-bottom: 100px;
+    }
+
+    .logo{
+      margin-left: -150px;
+
+    }
+    .logo img {
+        width: 80px; 
+    }
+
+    .navigation-bar {
+        background-color: #14533c; 
+        height: 80px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #navigation-container {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+    }
+
+    .container {
+        width:fit-content;
+        margin: 50px 20px 50px auto;
+        margin-right: 100px;
+        background-color: #f8dd8aa1;
+        padding: 170px;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        float: right;
+        margin-top: 90px;
+    }
+
+    .profile {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .profile img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 5px solid #070707;
+      margin-bottom: 10px;
+    }
+
+    .profile h2 {
+      margin: 0;
+      margin-bottom: 10px;
+      font-size: 24px;
+      text-align: left;
+    }
+
+    .student-number {
+      font-size: 18px;
+      text-align: left;
+    }
+
+    .buttons {
+      text-align: center;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .buttons .skip {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    .buttons .select {
+      background-color: #3498db;
+      color: #fff;
+    }
+   
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .form-group:last-child {
+        margin-right: 0;
+    }
+  </style>
+
+</head> 
+<body>
+  <div class="navigation-bar">
+    <div id="navigation-container">
+      <div class="logo">
+        <img src="yupilogo.png">
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="profile">
+      <h2>User's Name</h2>
+      <p class="student-number">Student Number: XXXX-XXXXX</p>
+      <img src="default-profile-picture.jpg" alt="Profile Picture">
+    </div>
+    <div class="buttons">
+      <button class="skip">Skip</button>
+      <button class="select">Select from Device</button>
+    </div>
+  </div>
+</body>
+</html>
