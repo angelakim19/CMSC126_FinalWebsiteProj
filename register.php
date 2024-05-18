@@ -17,11 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Database connection
     $servername = "localhost"; 
     $username = "root"; 
-    $password = "your_password"; 
+    $dbpassword = "your_password"; 
     $dbname = "registration_db";
 
     // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $username, $dbpassword, $dbname);
 
     // Check connection
     if ($conn->connect_error) {
@@ -52,6 +52,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
     $conn->close();
-
 }
 ?>

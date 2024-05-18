@@ -10,6 +10,7 @@ if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_
 $firstname = htmlspecialchars($_SESSION['firstname']);
 $lastname = htmlspecialchars($_SESSION['lastname']);
 $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
+$profilePicture = isset($_SESSION['profile_picture']) ? $_SESSION['profile_picture'] : 'default-profile-picture.jpg';
 ?>
 
 <!DOCTYPE html>
@@ -59,11 +60,11 @@ $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
         margin-left: 20px;
         margin-right: 70px;
         background-color: #f8dd8aa1;
-        padding: 150px;
+        padding: 100px;
         border-radius: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         float: right;
-        margin-top: 120px;
+        margin-top: 100px;
     }
 
     .profile {
@@ -74,7 +75,7 @@ $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
     .profile img {
       width: 200px;
       height: 200px;
-      border-radius: 50%;
+      border-radius: 80%;
       border: 5px solid #070707;
       margin-bottom: 10px;
     }
@@ -84,11 +85,13 @@ $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
       margin-bottom: 10px;
       font-size: 24px;
       text-align: left;
+      margin-left: -50px;
     }
 
     .student-number {
       font-size: 18px;
       text-align: left;
+      margin-left: -50px;
     }
 
     .buttons {
@@ -129,6 +132,36 @@ $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
     .form-group:last-child {
         margin-right: 0;
     }
+
+    .profile-picture-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    .profile-picture-container input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .choose-file-button {
+      background-color: #08542a;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+
+    .choose-file-button:hover {
+      background-color: #b11e2a;
+    }
   </style>
 </head> 
 <body>
@@ -144,12 +177,28 @@ $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
     <div class="profile">
       <h2>Welcome, <?php echo $firstname . " " . $lastname; ?>!</h2>
       <p class="student-number">Student Number: <?php echo $studentnumber; ?></p>
-      <img src="default-profile-picture.jpg" alt="Profile Picture">
+      <div class="profile-picture-container">
+        <img id="profilePicture" src="<?php echo $profilePicture; ?>" alt="Profile Picture" width="200" height="200">
+        <input type="file" id="file-upload" name="profilePicture" accept="image/*">
+      </div>
     </div>
     <div class="buttons">
       <button class="skip">Skip</button>
-      <button class="select">Select from Device</button>
+      <label for="file-upload" class="choose-file-button">Choose File</label>
+      <button type="submit" class="select">Upload</button>
     </div>
   </div>
+
+  <script>
+    document.querySelector('input[type="file"]').addEventListener('change', function(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById('profilePicture').src = reader.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    });
+
+   
+  </script>
 </body>
 </html>
