@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to YUPi University Library</title>
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif; 
+        background-image: url('YUPimainbg.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: white;
+        text-align: center;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+    
+    .logo img {
+        width: 80px;
+        margin-left: -150px;
+    }
+
+    .logo-text {
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .navigation-bar {
+        background-color: #14533c;
+        height: 80px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+    }
+
+    #navigation-container {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+    }
+
+    h1 {
+        margin-top: 120px;
+        font-size: 48px;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 24px;
+        margin-top: 10px;
+    }
+
+    .arrow-button {
+        margin-top: 50px;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: #14533c;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+    }
+
+    .arrow-button:hover {
+        transform: scale(1.1);
+    }
+
+    .arrow-button:active {
+        transform: scale(0.9);
+    }
+
+    .arrow-button svg {
+        fill: white;
+        width: 24px;
+        height: 24px;
+        transform: rotate(90deg); /
+    }
+  </style>
+</head>
+<body>
+  <div class="navigation-bar">
+    <div id="navigation-container">
+      <div class="logo">
+        <img src="yupilogo.png" alt="YUPi Logo">
+        <div class="logo-text">YUPi</div>
+      </div>
+    </div>
+  </div>
+  
+  <h1>Welcome to YUPi University Library</h1>
+  <p>Your gateway to knowledge and resources</p>
+
+  <button class="arrow-button" onclick="window.location.href='#your-link-here'">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 2L3 13h6v7h6v-7h6L12 2z"/>
+    </svg>
+  </button>
+</body>
+</html>
