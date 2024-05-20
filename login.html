@@ -1,212 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUPI Login</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Titan+One&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to YUPi University Library</title>
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif; 
+        background-image: url('YUPilogin_bg.png');
+        background-size: cover;
+        background-repeat: no-repeat;       
+        align-items: center;
+        justify-content: center;     
+    }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            height: 100%;
-            width: 100%;
-            background-color: #fbc130;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden; /* Hide overflow */
-        }
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+    
+    .logo img {
+        width: 80px;
+        margin-left: -150px;
+    }
 
-        .container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-        }
+    .logo-text {
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
 
-        header {
-            background-color: #007b70;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            width: 100%;
-            position: absolute;
-            top: 0;
-        }
+    .navigation-bar {
+        background-color: #14533c;
+        height: 80px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+    }
 
-        .logo {
-            width: 70px;
-            margin-right: 20px;
-        }
+    #navigation-container {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+    }
 
-        .left-side {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50%;
-            background-color: #fbc130;
-            overflow: hidden; /* Hide overflow */
-        }
+    .login-container {
+        background-color: #f8dd8a7a;
+        padding: 30px;
+        border-radius: 10px;
+        margin-top: 300px;
+        margin-left: 900px;
+        text-align: center;
+        width: 400px;
+        height: 300px;
+    }
 
-        .welcome {
-            font-family: 'Titan One', cursive;
-            font-size: 100px;
-            color: #000;
-            text-align: center;
-            margin-left: 50px;
-            display: flex;
-            flex-direction: column;
-        }
+    .input-container {
+        margin-bottom: 20px;
+        margin-top: 30px;
+    }
 
-        .welcome .back-to {
-            text-align: center;
-            font-size: 60px;
-        }
+    .input-container input {
+        padding: 10px;
+        width: 75%;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top: 2px;
+    }
 
-        .welcome .yupi {
-            font-size: 250px;
-            margin-top: -40px;
-        }
+    .buttons-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+    }
 
-        .right-side {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50%;
-            background-color: #fbc130;
-            overflow: hidden; /* Hide overflow */
-        }
+    .buttons-container button {
+        padding: 10px 20px;
+        margin: 0 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        background-color: #08542a;
+        color: #fff;
+        transition: background-color 0.3s;
+    }
 
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .input-group input::placeholder {
-            color: #888; /* Change the color of the placeholder text */
-            font-size: 24px; /* Change the font size of the placeholder text */
-            font-family: 'Fredoka One', sans-serif; /* Change the font family of the placeholder text */
-        }
-
-        .input-group {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 20px; /* Adjust padding for larger input fields */
-            font-size: 24px; /* Increase font size */
-            border-radius: 25px; /* Rounded corners */
-            border: 2px solid #0c0b0b;
-            box-shadow: -3px -3px 7px white, 3px 3px 7px rgba(0, 0, 0, 0.2);
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #5c8b87;
-        }
-
-        .register-link {
-            margin-top: 10px;
-            font-size: 18px;
-            color: #000;
-        }
-
-        .register-link a {
-            color: #007b70;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .button {
-            width: 180px; /* Set a fixed width for the buttons */
-            padding: 10px; /* Adjust padding for larger buttons */
-            font-size: 20px;
-            font-family: 'Titan One', cursive;
-            border-radius: 25px; /* Rounded corners */
-            border: none;
-            cursor: pointer;
-            text-align: center;
-            box-shadow: -3px -3px 7px white, 3px 3px 7px rgba(0, 0, 0, 0.2);
-        }
-
-        .cancel-button {
-            background-color: #808080;
-            color: #fff;
-        }
-
-        .login-button {
-            background-color: #00a676;
-            color: #fff;
-        }
-
-        .button:hover {
-            opacity: 0.8;
-        }
-    </style>
+    .buttons-container button:hover {
+        background-color: #b11e2a;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <img src="yupilogo.png" alt="YUPI Logo" class="logo">
-        </header>
-        <div class="left-side">
-            <div class="welcome">
-                Welcome
-                <span class="back-to">back to</span>
-                <span class="yupi">YUPI</span>
-            </div>
-        </div>
-        <div class="right-side">
-            <div class="form-container">
-                <div class="input-group">
-                    <input type="text" id="email" placeholder="Email/Student Number">
-                </div>
-                <div class="input-group">
-                    <input type="password" id="password" placeholder="Enter Password">
-                </div>
-                <div class="register-link">
-                    No account yet? <a href="register.html">Register</a>
-                </div>
-                <div class="button-group">
-                    <button class="button cancel-button" onclick="cancel()">CANCEL</button>
-                    <button class="button login-button" onclick="login()">LOG IN</button>
-                </div>
-            </div>
-        </div>
+  <div class="navigation-bar">
+    <div id="navigation-container">
+      <div class="logo">
+        <img src="yupilogo.png" alt="YUPi Logo">
+        <div class="logo-text">YUPi</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-container">
+    <div class="input-container">
+        <input type="email" placeholder="Enter your email">
+    </div>
+    <div class="input-container">
+        <input type="password" placeholder="Enter your password">
+    </div>
+    <p>No account yet? <a href="register.html">Register</a></p>
+    <div class="buttons-container">
+        <button onclick="window.location.href='index.html'">Cancel</button>
+        <button onclick="window.location.href='welcomepage.html'">Log In</button>
     </div>
     <script>
-        function login() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            // Add login logic here
-            alert(`Logging in with Email: ${email}, Password: ${password}`);
-        }
+      function login() {
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          // Add login logic here
+          alert(`Logging in with Email: ${email}, Password: ${password}`);
+      }
 
-        function cancel() {
-            // Add cancel logic here
-            alert('Cancel button clicked');
-        }
-    </script>
+      function cancel() {
+          // Add cancel logic here
+          alert('Cancel button clicked');
+      }
+  </script>
+  </div>
 </body>
 </html>
