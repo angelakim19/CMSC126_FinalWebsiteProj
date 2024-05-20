@@ -1,23 +1,22 @@
 <?php
 include 'db.php';
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if (isset($_POST['user_id'])) {
+    $user_id = $_POST['user_id'];
+    
+    $sql = "DELETE FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
 
-    $sql = "DELETE FROM users WHERE id = $id";
-
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->execute()) {
         echo "User deleted successfully";
     } else {
-        echo "Error deleting user: " . $conn->error;
+        echo "Error deleting user: " . $stmt->error;
     }
+
+    $stmt->close();
+    $conn->close();
 } else {
-    echo "No user ID specified";
+    echo "No user ID provided";
 }
-
-$conn->close();
-
-// Redirect back to the user's information page
-header("Location: user_information.php");
-exit;
 ?>

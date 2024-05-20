@@ -1,71 +1,49 @@
 <?php
-session_start();
+$target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profilePicture'])) {
-    // Ensure the upload directory exists
-    $uploadDir = 'uploads/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
-
-    $fileTmpPath = $_FILES['profilePicture']['tmp_name'];
-    $fileName = $_FILES['profilePicture']['name'];
-    $fileSize = $_FILES['profilePicture']['size'];
-    $fileType = $_FILES['profilePicture']['type'];
-    $fileNameCmps = explode(".", $fileName);
-    $fileExtension = strtolower(end($fileNameCmps));
-
-    // Sanitize file name
-    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-
-    // Allowed file types
-    $allowedfileExtensions = array('jpg', 'gif', 'png', 'jpeg');
-    
-    if (in_array($fileExtension, $allowedfileExtensions)) {
-        $dest_path = $uploadDir . $newFileName;
-
-        if(move_uploaded_file($fileTmpPath, $dest_path)) {
-            $servername = "localhost";
-            $username = "root";
-            $password = "your_password";
-            $dbname = "registration_db";
-
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            // Update the user's profile picture in the database
-            $studentnumber = $_SESSION['studentnumber'];
-            $stmt = $conn->prepare("UPDATE users SET profile_picture = ? WHERE studentnumber = ?");
-            if ($stmt === false) {
-                die("Prepare failed: " . $conn->error);
-            }
-
-            $stmt->bind_param('ss', $dest_path, $studentnumber);
-            if ($stmt->execute()) {
-                // Update the session with the new profile picture path
-                $_SESSION['profile_picture'] = $dest_path;
-                
-                // Redirect back to the landing page
-                header("Location: rgtrlandingpage.php");
-                exit();
-            } else {
-                echo "Error updating record: " . $stmt->error;
-            }
-
-            $stmt->close();
-            $conn->close();
-        } else {
-            echo 'There was an error moving the uploaded file.';
-        }
+// Check if image file is a actual image or fake image
+if(isset($_POST["submit"])) {
+    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
     } else {
-        echo 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions);
+        echo "File is not an image.";
+        $uploadOk = 0;
     }
+}
+
+// Check if file already exists
+if (file_exists($target_file)) {
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+}
+
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 500000) {
+    echo "Sorry, your file is too large.";
+    $uploadOk = 0;
+}
+
+// Allow certain file formats
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    $uploadOk = 0;
+}
+
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
 } else {
-    echo 'No file uploaded or invalid request method.';
+    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
 }
 ?>

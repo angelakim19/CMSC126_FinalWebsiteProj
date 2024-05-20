@@ -1,5 +1,5 @@
-<?php
-session_start();
+\<?php
+include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $firstname = $_POST['firstname'];
@@ -9,47 +9,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $college = $_POST['college'];
     $program = $_POST['program'];
+    $phonenumber = $_POST['phoneNumber'];
+    $position = $_POST['position'];
     $password = $_POST['password'];
 
-    // Hash the password before storing
+    // Hash the password before saving it to the database
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Database connection
-    $servername = "localhost"; 
-    $username = "root"; 
-    $dbpassword = "your_password"; 
-    $dbname = "registration_db";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $dbpassword, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
     // Prepare and bind
-    $stmt = $conn->prepare("INSERT INTO users (firstname, middlename, lastname, studentnumber, email, college, program, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    if ($stmt === false) {
-        die("Prepare failed: " . $conn->error);
-    }
+    $stmt = $conn->prepare("INSERT INTO users (firstname, middlename, lastname, studentnumber, email, college, program, password, position, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssssss", $firstname, $middlename, $lastname, $studentnumber, $email, $college, $program, $hashed_password, $position, $phonenumber);
 
-    $bind = $stmt->bind_param("ssssssss", $firstname, $middlename, $lastname, $studentnumber, $email, $college, $program, $hashed_password);
-    if ($bind === false) {
-        die("Bind failed: " . $stmt->error);
-    }
-
+    // Execute the statement
     if ($stmt->execute()) {
-        $_SESSION['firstname'] = $firstname;
-        $_SESSION['lastname'] = $lastname;
-        $_SESSION['studentnumber'] = $studentnumber;
-
+        echo "New record created successfully";
         header("Location: rgtrlandingpage.php");
-        exit;
+        exit();
     } else {
-        echo "Execute failed: " . $stmt->error;
+        echo "Error: " . $stmt->error;
     }
 
+    // Close the statement and connection
     $stmt->close();
     $conn->close();
 }

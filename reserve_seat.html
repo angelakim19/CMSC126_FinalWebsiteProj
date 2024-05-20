@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUPI Library Reservation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Titan+One&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Fredoka One', Arial, sans-serif;
+            background-color: #fbc130;
+        }
+
+        .container {
+            width: 100%;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #007b70;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .header .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .logo-container img {
+            height: 50px;
+        }
+
+        .header .logo-container .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .header .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .library-cover {
+            background-image: url('UPLIB.jpg'); /* Your library cover image */
+            background-size: cover;
+            background-position: center;
+            height: 300px;
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        .user-info {
+            background-color: #fbc130;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            position: relative;
+            top: -50px; /* Adjust this value to move the profile picture up */
+        }
+
+        .user-info img {
+            border-radius: 50%;
+            height: 200px;
+            width: 200px;
+            border: 5px solid black;
+            background-color: white;
+            position: relative;
+            top: -80px; /* Adjust this value to move the profile picture up */
+            left: 20px; /* Adjust this value to move the profile picture left */
+        }
+
+        .user-info .text-info {
+            margin-left: 40px; /* Adjust this value to move the text right */
+            margin-top: -140px;
+        }
+
+        .user-info .name {
+            font-size: 28px;
+            font-family: 'Fredoka One', sans-serif;
+            margin: 0;
+        }
+
+        .user-info .student-number {
+            font-size: 22px;
+            font-family: 'Fredoka One', sans-serif;
+            margin: 0;
+        }
+
+        .library-places {
+            margin-top: -60px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .library-places button {
+            margin-top: 50px;
+            display: inline-flexbox;
+            width: 220px;
+            padding: 20px;
+            margin: 30px;
+            background-color: #007b70;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-family: 'Fredoka One', sans-serif;
+            font-size: 16px;
+        }
+
+        .library-places button:hover {
+            background-color: #005f50;
+        }
+
+        .library-places .available-seats {
+            display: block;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .library-places h2 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-family: 'Fredoka One', sans-serif;
+        }
+
+        .reservation-form {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .reservation-form select {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-family: 'Fredoka One', sans-serif;
+        }
+
+        .reservation-form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007b70;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Fredoka One', sans-serif;
+        }
+
+        .reservation-form button:hover {
+            background-color: #005f50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="yupilogo.png" alt="YUPI Logo">
+                <div class="title">YUPI</div>
+            </div>
+            <div class="nav">
+                <a href="#">ABOUT US</a>
+            </div>
+        </div>
+        <div class="library-cover"></div>
+        <div class="user-info">
+            <img src="user.jpg" alt="User Image" id="profile-pic">
+            <div class="text-info">
+                <div class="name" id="user-name">User's Name</div>
+                <div class="student-number" id="student-number">Student Number</div>
+            </div>
+        </div>
+        <div class="library-places">
+            <h2>Library Places</h2>
+            <button onclick="showReservationForm(1, 'Reading Area', 24)">Reading Area <span class="available-seats">(24 spaces available)</span></button>
+            <button onclick="showReservationForm(2, 'Computer Laboratory', 10)">Computer Laboratory <span class="available-seats">(10 spaces available)</span></button>
+            <button onclick="showReservationForm(3, 'Lemito', 25)">Lemito <span class="available-seats">(25 spaces available)</span></button>
+            <button onclick="showReservationForm(4, 'Books Area', 30)">Books Area <span class="available-seats">(30 spaces available)</span></button>
+        </div>
+        <div class="reservation-form" id="reservation-form">
+            <h3 id="place-name"></h3>
+            <select id="seat-number">
+                <!-- Options will be populated dynamically -->
+            </select>
+            <button onclick="reserveSeat()">Reserve</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchUserInfo();
+        });
+
+        async function fetchUserInfo() {
+            let response = await fetch('fetch_user_info.php');
+            let userInfo = await response.json();
+            document.getElementById('user-name').textContent = `${userInfo.lastname}, ${userInfo.firstname} ${userInfo.middlename}`;
+            document.getElementById('student-number').textContent = userInfo.studentnumber;
+            document.getElementById('profile-pic').src = 'path_to_profile_picture/' + userInfo.studentnumber + '.jpg'; // Set path to user profile picture
+        }
+
+        function showReservationForm(place_id, place_name, available_seats) {
+            document.getElementById('place-name').textContent = place_name;
+            let seatSelect = document.getElementById('seat-number');
+            seatSelect.innerHTML = '';
+            for (let i = 1; i <= available_seats; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.textContent = `Seat ${i}`;
+                seatSelect.appendChild(option);
+            }
+            document.getElementById('reservation-form').style.display = 'block';
+            document.getElementById('reservation-form').dataset.placeId = place_id;
+        }
+
+        async function reserveSeat() {
+            let place_id = document.getElementById('reservation-form').dataset.placeId;
+            let seat_number = document.getElementById('seat-number').value;
+            let response = await fetch('reserve_seat.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `place_id=${place_id}&seat_number=${seat_number}`
+            });
+
+            let result = await response.json();
+            alert(result.message);
+
+            if (result.success) {
+                // Update available seats display
+                let buttons = document.querySelectorAll('.library-places button');
+                buttons.forEach(button => {
+                    if (button.innerText.includes(document.getElementById('place-name').textContent)) {
+                        let span = button.querySelector('.available-seats');
+                        span.textContent = `(${result.available_seats} spaces available)`;
+                    }
+                });
+                document.getElementById('reservation-form').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

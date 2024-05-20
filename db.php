@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username = "root"; // replace with your database username
-$password = ""; // replace with your database password
-$dbname = "registration_db";
+$username = "root";  // Use your MySQL username
+$password = "";      // Use your MySQL password
+$dbname = "registration_db";  // The database you just created
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

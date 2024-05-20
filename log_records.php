@@ -1,175 +1,155 @@
-\<!DOCTYPE html>
+<?php
+include 'db.php';
+
+// Assuming user ID is passed via session or another method
+session_start();
+$user_id = $_SESSION['user_id'] ?? 1; // Replace with actual user ID retrieval logic
+
+$sql = "SELECT log_date, log_in, log_out, places_visited FROM log_records WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$log_records = [];
+
+while ($row = $result->fetch_assoc()) {
+    $log_records[] = $row;
+}
+
+$stmt->close();
+$conn->close();
+?>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log Records</title>
+    <title>YUPI Log Records</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Titan+One&display=swap');
-
         body, html {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            height: 100%;
-            width: 100%;
             background-color: #fbc130;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .container {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-        }
-
-        header {
-            background-color: #007b70;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            width: 70px;
-            margin-right: 20px;
-        }
-
-        .title {
-            font-family: 'Titan One', cursive;
-            font-size: 36px;
-            color: #000;
-        }
-
-        .title span {
-            font-family: 'Fredoka One', cursive;
-            font-size: 20px;
-            margin-left: 10px;
-        }
-
-        .content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             width: 100%;
             padding: 20px;
         }
 
-        .search-bar {
+        .header {
+            background-color: #007b70;
+            color: white;
+            padding: 10px;
             display: flex;
             align-items: center;
-            width: 80%;
-            margin-bottom: 20px;
+            justify-content: space-between;
         }
 
-        .search-bar input {
-            width: 100%;
-            padding: 10px;
-            font-size: 18px;
-            border: 2px solid #000;
-            border-radius: 25px;
-            box-shadow: -3px -3px 7px white, 3px 3px 7px rgba(0, 0, 0, 0.2);
+        .header img {
+            height: 50px;
         }
 
-        .search-bar button {
-            padding: 10px 20px;
-            font-size: 18px;
-            font-family: 'Titan One', cursive;
-            border-radius: 25px;
+        .header .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header .search-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .header input[type="text"] {
+            padding: 5px;
             border: none;
-            cursor: pointer;
-            margin-left: 10px;
-            background-color: #808080;
-            color: #fff;
-            box-shadow: -3px -3px 7px white, 3px 3px 7px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
         }
 
-        table {
-            width: 80%;
+        .header button {
+            background-color: #ccc;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .user-info {
+            background-color: #fbc130;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .user-info .name {
+            font-size: 20px;
+        }
+
+        .user-info .student-number {
+            font-size: 16px;
+        }
+
+        .log-records table {
+            width: 100%;
             border-collapse: collapse;
         }
 
-        th, td {
-            padding: 10px;
+        .log-records th, .log-records td {
+            border: 1px solid #ccc;
+            padding: 8px;
             text-align: left;
-            border-bottom: 2px solid #000;
         }
 
-        th {
+        .log-records th {
             background-color: #007b70;
             color: white;
-            font-family: 'Fredoka One', cursive;
-        }
-
-        td {
-            background-color: #fbc130;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .no-records {
-            text-align: center;
-            padding: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <img src="yupilogo.png" alt="YUPI Logo" class="logo">
-            <div class="title">
-                YUPI <span>ADMIN PANEL</span>
-            </div>
-        </header>
-        <div class="content">
-            <h1 class="title">LOG RECORDS</h1>
-            <div class="search-bar">
+        <div class="header">
+            <img src="yupilogo.png" alt="YUPI Logo">
+            <div class="title">YUPI</div>
+            <div class="search-box">
                 <input type="text" placeholder="Search...">
-                <button>Filter</button>
+                <button>Search</button>
             </div>
+        </div>
+        <div class="user-info">
+            <div class="name">Nebria, Quennie A.</div>
+            <div class="student-number">2023-05107</div>
+        </div>
+        <div class="log-records">
+            <h2>Log Records</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>Select</th>
-                        <th>ID Number</th>
-                        <th>Name</th>
-                        <th>College/Department</th>
-                        <th>Program</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                        <th>Places Visited</th>
-                        <th>Position</th>
+                        <th>Date</th>
+                        <th>Log In</th>
+                        <th>Log Out</th>
+                        <th>Place/s Visited</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    include 'db.php';
-                    $sql = "SELECT * FROM log_records";
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>
-                                <td><input type='checkbox'></td>
-                                <td>" . $row['id_number'] . "</td>
-                                <td>" . $row['name'] . "</td>
-                                <td>" . $row['college_department'] . "</td>
-                                <td>" . $row['program'] . "</td>
-                                <td>" . $row['time_in'] . "</td>
-                                <td>" . $row['time_out'] . "</td>
-                                <td>" . $row['places_visited'] . "</td>
-                                <td>" . $row['position'] . "</td>
-                            </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='9'>No records found</td></tr>";
-                    }
-                    $conn->close();
-                    ?>
+                    <?php foreach ($log_records as $record): ?>
+                        <tr>
+                            <td><?php echo $record['log_date']; ?></td>
+                            <td><?php echo $record['log_in']; ?></td>
+                            <td><?php echo $record['log_out']; ?></td>
+                            <td><?php echo $record['places_visited']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php if (empty($log_records)): ?>
+                        <tr>
+                            <td colspan="4" style="text-align:center;">No records found</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
