@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to YUPi University Library</title>
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif; 
+        background-image: url('YUPi_lib.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        color: white;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+    
+    .logo img {
+        width: 80px;
+        margin-right: 10px;
+    }
+
+    .logo-text {
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .navigation-bar {
+        background-color: #14533c;
+        height: 80px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+    }
+
+    #navigation-container {
+        width: 90%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    h1 {
+        margin-top: 120px;
+        font-size: 48px;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 24px;
+        margin-top: 10px;
+    }
+
+    .profile-section {
+        background-color: transparent;
+        padding: 20px;
+        border-radius: 0px;
+        margin-top: 450px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 1500px;
+        margin-left: 1px;
+        margin-right: auto;
+        flex-direction: row-reverse; /* Change flex direction to reverse */
+    }
+
+    .profile-info-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .profile-photo {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        margin-right: 50px; /* Adjust margin-right to create space */
+        margin-left: 30px;
+        margin-top: -60px;
+    }
+
+    .profile-info {
+        text-align: left;
+        color: black;
+    }
+
+    .profile-info h2 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .profile-info p {
+        margin: 5px 0 0;
+        font-size: 18px;
+    }
+
+    .buttons-section {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-top: 0px;
+    }
+
+    .buttons-section button {
+        background-color: #14533c;
+        color: white;
+        border: none;
+        padding: 15px 100px;
+        margin: 80px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 30px;
+    }
+
+    .buttons-section button:hover {
+        background-color: #7a0422;
+    }
+
+    .clearfix::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+  </style>
+</head>
+<body>
+  <div class="navigation-bar">
+    <div id="navigation-container">
+      <div class="logo">
+        <img src="yupilogo.png" alt="YUPi Logo">
+        <div class="logo-text">YUPi</div>
+      </div>
+      <nav>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
+          <li><a href="#" style="color: white; text-decoration: none; font-size: 18px; margin-left: 20px;">ABOUT US</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <div class="profile-section">
+      <div class="profile-info-container">
+        <img src="default_user_photo.png" alt="User Photo" class="profile-photo">
+        <div class="profile-info">
+          <h2>Nebria, Quennie A.</h2>
+          <p>2023-05107</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons-section">
+    <button onclick="navigateTo('profile')">Profile</button>
+    <button onclick="navigateTo('records')">Records of Log in</button>
+    <button onclick="navigateTo('library')">Library Places</button>
+  </div>
+
+  <script>
+    function navigateTo(section) {
+      switch(section) {
+        case 'profile':
+          alert('Navigating to Profile');
+          // Add navigation logic here
+          break;
+        case 'records':
+          alert('Navigating to Records of Log in');
+          // Add navigation logic here
+          break;
+        case 'library':
+          alert('Navigating to Library Places');
+          // Add navigation logic here
+          break;
+        default:
+          alert('Unknown section');
+      }
+    }
+  </script>
+</body>
+</html>
