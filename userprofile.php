@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_SESSION['studentnumber'])) {
+    header("Location: register.php");
+    exit();
+}
+
+$firstname = htmlspecialchars($_SESSION['firstname']);
+$lastname = htmlspecialchars($_SESSION['lastname']);
+$studentnumber = htmlspecialchars($_SESSION['studentnumber']);
+$profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSION['profile_picture']) : 'default_userp.png';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,29 +66,6 @@
       border-radius: 50%; 
       margin-right: 30px; 
       cursor: pointer;
-    }
-
-    .user-dropdown {
-      display: none; /* Hidden by default */
-      position: absolute;
-      background-color: #fbfffe;
-      min-width: 120px;
-      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-      z-index: 1;
-      border-radius: 10px;
-      margin-top: 20px;
-      right: 30px; /* Align dropdown with user photo */
-    }
-
-    .user-dropdown a {
-      color: rgb(6, 6, 6);
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .user-dropdown a:hover {
-      background-color: #7a0422;
     }
 
     .about-us {
@@ -199,28 +190,21 @@
     </div>
     <nav>
       <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-        <li class="about-us"><a href="#" id="about-us-link">ABOUT US</a></li>
-        <li><img src="default_userp.png" alt="User Photo" class="user-photo" id="user-photo"></li> 
+        <li class="about-us"><a href="about_us.html" id="about-us-link">ABOUT US</a></li>
+        <li><img src="<?php echo $profilePicture; ?>" alt="User Photo" class="user-photo" id="user-photo"></li> 
       </ul>
     </nav>
   </div>
 
   <div class="clearfix">
     <div class="profile-section">
-      <div class="profile-info-container">
-        <img src="<?php echo $profilePicture; ?>" alt="User Photo" class="profile-photo">
-        <div class="profile-info">
-          <h2><?php echo $firstname . " " . $lastname; ?></h2>
-          <p><?php echo $studentnumber; ?></p>
+        <div class="profile-info-container">
+            <img src="<?php echo $profilePicture; ?>" alt="User Photo" class="profile-photo">
+            <div class="profile-info">
+                <h2><?php echo $firstname . " " . $lastname; ?></h2>
+                <p><?php echo $studentnumber; ?></p>
+            </div>
         </div>
-      </div>
-      <!-- User dropdown menu -->
-      <div class="user-dropdown" id="user-dropdown">
-        <a href="#" id="settings-link">Settings</a>
-        <a href="#" id="feedback-link">Feedback</a>
-        <a href="#" id="help-link">Help and Support</a>
-        <a href="logout.php" id="logout-link">Log Out</a>
-      </div>
     </div>
   </div>
 
@@ -231,46 +215,7 @@
   </div>
 
   <script>
-    document.getElementById('about-us-link').addEventListener('click', function() {
-      window       .location.href = 'about_us.html'; // Redirect to About Us page
-    });
-
-    document.getElementById('user-photo').addEventListener('click', function() {
-      var dropdown = document.getElementById('user-dropdown');
-      if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-      } else {
-        dropdown.style.display = 'block';
-      }
-    });
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function(event) {
-      if (!event.target.matches('.user-photo')) {
-        var dropdown = document.getElementById('user-dropdown');
-        if (dropdown.style.display === 'block') {
-          dropdown.style.display = 'none';
-        }
-      }
-    }
-
-    // Add event listeners for dropdown menu items
-    document.getElementById('settings-link').addEventListener('click', function() {
-      // Add logic to navigate to settings page
-    });
-
-    document.getElementById('feedback-link').addEventListener('click', function() {
-      // Add logic to navigate to feedback page
-    });
-
-    document.getElementById('help-link').addEventListener('click', function() {
-      // Add logic to navigate to help and support page
-    });
-
-    document.getElementById('logout-link').addEventListener('click', function() {
-      // Add logic to log out user
-    });
-
+    // Add event listeners for navigation buttons
     function navigateTo(section) {
       switch (section) {
         case 'profile':
@@ -316,4 +261,3 @@
   </script>
 </body>
 </html>
-
