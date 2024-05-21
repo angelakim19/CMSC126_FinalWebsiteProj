@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,21 +56,22 @@
     }
 
     .user-dropdown {
-      display: flexbox;
+      display: none; /* Hidden by default */
       position: absolute;
       background-color: #fbfffe;
       min-width: 120px;
       box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
       z-index: 1;
-      margin-top: -780px;
       border-radius: 10px;
+      margin-top: 20px;
+      right: 30px; /* Align dropdown with user photo */
     }
 
     .user-dropdown a {
       color: rgb(6, 6, 6);
       padding: 12px 16px;
       text-decoration: none;
-      display: flex;
+      display: block;
     }
 
     .user-dropdown a:hover {
@@ -199,7 +201,7 @@
     <nav>
       <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
         <li class="about-us"><a href="#" id="about-us-link">ABOUT US</a></li>
-        <li><img src="default_userp.png" alt="User Photo" class="user-photo" id="user-photo"></li> 
+        <li><img src="<?php echo $profilePicture; ?>" alt="User Photo" class="user-photo" id="user-photo"></li> 
       </ul>
     </nav>
   </div>
@@ -207,10 +209,10 @@
   <div class="clearfix">
     <div class="profile-section">
       <div class="profile-info-container">
-        <img src="default_userp.png" alt="User Photo" class="profile-photo">
+        <img src="<?php echo $profilePicture; ?>" alt="User Photo" class="profile-photo">
         <div class="profile-info">
-          <h2>Nebria, Quennie A.</h2>
-          <p>2023-05107</p>
+          <h2><?php echo $firstname . " " . $lastname; ?></h2>
+          <p><?php echo $studentnumber; ?></p>
         </div>
       </div>
       <!-- User dropdown menu -->
@@ -218,7 +220,7 @@
         <a href="#" id="settings-link">Settings</a>
         <a href="#" id="feedback-link">Feedback</a>
         <a href="#" id="help-link">Help and Support</a>
-        <a href="#" id="logout-link">Log Out</a>
+        <a href="logout.php" id="logout-link">Log Out</a>
       </div>
     </div>
   </div>
@@ -230,64 +232,101 @@
   </div>
 
   <script>
-    document.getElementById('about-us-link').addEventListener('click', function() {
-      window.location.href = 'about_us.html'; // Redirect to About Us page
-    });
+document.getElementById('about-us-link').addEventListener('click', function() {
+  window.location.href = 'about_us.html'; // Redirect to About Us page
+});
 
-    document.getElementById('user-photo').addEventListener('click', function() {
-      var dropdown = document.getElementById('user-dropdown');
-      if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-      } else {
-        dropdown.style.display = 'block';
-      }
-    });
+document.getElementById('user-photo').addEventListener('click', function() {
+  var dropdown = document.getElementById('user-dropdown');
+  if (dropdown.style.display === 'block') {
+    dropdown.style.display = 'none';
+  } else {
+    dropdown.style.display = 'block';
+  }
+});
 
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function(event) {
-      if (!event.target.matches('.user-photo')) {
-        var dropdown = document.getElementById('user-dropdown');
-        if (dropdown.style.display === 'block') {
-          dropdown.style.display = 'none';
-        }
-      }
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.user-photo')) {
+    var dropdown = document.getElementById('user-dropdown');
+    if (dropdown.style.display === 'block') {
+      dropdown.style.display = 'none';
     }
+  }
+}
 
-    // Add event listeners for dropdown menu items
-    document.getElementById('settings-link').addEventListener('click', function() {
-      // Add logic to navigate to settings page
-    });
+// Add event listeners for dropdown menu items
+document.getElementById('settings-link').addEventListener('click', function() {
+  // Add logic to navigate to settings page
+});
 
-    document.getElementById('feedback-link').addEventListener('click', function() {
-      // Add logic to navigate to feedback page
-    });
+document.getElementById('feedback-link').addEventListener('click', function() {
+  // Add logic to navigate to feedback page
+});
 
-    document.getElementById('help-link').addEventListener('click', function() {
-      // Add logic to navigate to help and support page
-    });
+document.getElementById('help-link').addEventListener('click', function() {
+  // Add logic to navigate to help and support page
+});
 
-    document.getElementById('logout-link').addEventListener('click', function() {
-      // Add logic to log out user
-    });
+document.getElementById('logout-link').addEventListener('click', function() {
+  // Add logic to log out user
+});
 
-    function navigateTo(section) {
-      switch(section) {
-        case 'profile':
-          alert('Navigating to Profile');
-          // Add navigation logic here
-          break;
-        case 'records':
-          alert('Navigating to Records of Log in');
-          // Add navigation logic here
-          break;
-        case 'library':
-          alert('Navigating to Library Places');
-          // Add navigation logic here
-          break;
-        default:
-          alert('Unknown section');
-      }
+function navigateTo(section) {
+  switch (section) {
+    case 'profile':
+      alert('Navigating to Profile');
+      // Add navigation logic here
+      break;
+    case 'records':
+      alert('Navigating to Records of Log in');
+      // Add navigation logic here
+      break;
+    case 'library':
+      alert('Navigating to Library Places');
+      // Add navigation logic here
+      break;
+    default:
+      alert('Unknown section');
+  }
+}
+
+// Fetch user data and update profile info
+$(document).ready(function() {
+  $.ajax({
+    url: 'userprofile_logic.php', // Adjust the URL as needed
+    method: 'GET',
+    success: function(data) {
+      var userData = JSON.parse(data);
+      // Update profile info
+      document.querySelector('.profile-info h2').textContent = userData.firstname + ' ' + userData.lastname;
+      document.querySelector('.profile-info p').textContent = userData.studentnumber;
+      document.querySelector('.profile-photo').src = userData.profilePicture;
+    },
+    error: function(xhr, status, error) {
+      console.error(error);
     }
+  });
+});
+
+// Flash effect for user name and student number
+window.onload = function() {
+  let nameElement = document.querySelector('.profile-info h2');
+  let numberElement = document.querySelector('.profile-info p');
+  let originalColor = nameElement.style.color;
+  let flash = function flashElement(element) {
+    element.style.transition = 'color 0.5s ease';
+    element.style.color = '#ff0000';
+    setTimeout(() => {
+      element.style.color = originalColor;
+    }, 500);
+  }
+
+  flashElement(nameElement);
+  flashElement(numberElement);
+}
+
   </script>
 </body>
 </html>
+
