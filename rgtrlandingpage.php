@@ -9,7 +9,7 @@ if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_
 $firstname = htmlspecialchars($_SESSION['firstname']);
 $lastname = htmlspecialchars($_SESSION['lastname']);
 $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
-$profilePicture = isset($_SESSION['profile_picture']) ? $_SESSION['profile_picture'] : 'default_user_photo.png';
+$profilePicture = isset($_SESSION['profile_picture']) ? $_SESSION['profile_picture'] : 'default_userp.png';
 ?>
 
 <!DOCTYPE html>
