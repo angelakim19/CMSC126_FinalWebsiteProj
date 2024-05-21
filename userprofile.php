@@ -200,7 +200,7 @@
     <nav>
       <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
         <li class="about-us"><a href="#" id="about-us-link">ABOUT US</a></li>
-        <li><img src="<?php echo $profilePicture; ?>" alt="User Photo" class="user-photo" id="user-photo"></li> 
+        <li><img src="default_userp.png" alt="User Photo" class="user-photo" id="user-photo"></li> 
       </ul>
     </nav>
   </div>
