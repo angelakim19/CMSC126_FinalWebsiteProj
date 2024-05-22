@@ -9,6 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $college = $_POST['college'];
     $program = $_POST['program'];
+    $phonenumber = $_POST['phonenumber'];  
+    $position = $_POST['position'];        
     $password = $_POST['password'];
 
     // Hash the password before storing
@@ -29,12 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare and bind
-    $stmt = $conn->prepare("INSERT INTO users (firstname, middlename, lastname, studentnumber, email, college, program, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (firstname, middlename, lastname, studentnumber, email, college, program, phonenumber, position, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     if ($stmt === false) {
         die("Prepare failed: " . $conn->error);
     }
 
-    $bind = $stmt->bind_param("ssssssss", $firstname, $middlename, $lastname, $studentnumber, $email, $college, $program, $hashed_password);
+    $bind = $stmt->bind_param("ssssssssss", $firstname, $middlename, $lastname, $studentnumber, $email, $college, $program, $phonenumber, $position, $hashed_password);
     if ($bind === false) {
         die("Bind failed: " . $stmt->error);
     }
