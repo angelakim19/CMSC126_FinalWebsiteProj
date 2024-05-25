@@ -9,6 +9,12 @@ if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_
 $firstname = htmlspecialchars($_SESSION['firstname']);
 $lastname = htmlspecialchars($_SESSION['lastname']);
 $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
+
+$email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : '';
+$phonenumber = isset($_SESSION['phonenumber']) ? htmlspecialchars($_SESSION['phonenumber']) : '';
+$college = isset($_SESSION['college']) ? htmlspecialchars($_SESSION['college']) : '';
+$program = isset($_SESSION['program']) ? htmlspecialchars($_SESSION['program']) : '';
+
 $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSION['profile_picture']) : 'default_userp.png';
 ?>
 
@@ -23,7 +29,7 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif; 
-      background-image: url('YUPi_userprofile.png');
+      background-image: url('YUPi_profileinfo_bg.png');
       background-size: cover;
       background-repeat: no-repeat;
       color: white;
@@ -117,16 +123,17 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
     }
 
     .profile-photo {
-      width: 300px;
-      height: 300px;
+      width: 310px;
+      height: 310px;
       border-radius: 50%;
       margin-right: 20px; 
-      margin-left: 16px;
-      margin-top: -140px;
+      margin-left: 7px;
+      margin-top: -300px;
       border: 5px solid whitesmoke; 
     }
 
     .profile-info {
+      display: flex;
       text-align: left;
       color: black;
     }
@@ -134,50 +141,62 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
     .profile-info h2 {
       margin: 0;
       font-size: 24px;
-      margin-top: -50px;
+      margin-top: -200px;
+      color: white;
     }
 
     .profile-info p {
       margin: 5px 0 0;
       font-size: 18px;
-    }
-
-    .buttons-section {
-      display: flex;
-      justify-content: flex-start; 
-      flex-wrap: wrap;
-      width: 100%;
-      margin-top: 0px;
-      padding-left: 25%; 
-    }
-
-    .buttons-section button {
-      background-color: #14533c;
+      font-weight: bold;
+      margin-top: -160px;
+      margin-left: -265px;
       color: white;
-      border: none;
-      padding: 15px 100px;
-      margin: 30px;
-      border-radius: 25px;
-      cursor: pointer;
+    }
+
+    .profile-infovertwo{
+      text-align: left;
+      color: white;
+      margin-top: -160px;
+    }
+
+    .profile-infovertwo p{
+      margin: 0;
+      font-size: 15px;
+      font-weight: bold;
+      color: white;
+      margin-left: 420px;
+      margin-bottom: 7px;;
+    }
+
+    .edit-buttons {
+      display: flex;
+      justify-content: center; 
+      gap: 140px; 
+      margin-top: 100px; 
+      margin-left: -845px;
+      flex-wrap: wrap;
+    }
+
+    .edit-profile-btn, .edit-info-btn {
+      display: flex;
+      padding: 10px 20px;
+      border-radius: 30px; /* Make the buttons oblong */
+      background-color: #14533c; /* Button background color */
+      color: white; /* Button text color */
+      text-decoration: none;
       font-size: 18px;
-      box-shadow: 0 4px #0e392b;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+      box-shadow: 0 10px 16px rgba(0, 0, 0, 0.1); /* 3D effect */
     }
 
-    .buttons-section button:hover {
-      background-color: #7a0422;
-      transform: translateY(-2px); 
-      box-shadow: 0 6px #0e392b; 
+    .edit-profile-btn:hover, .edit-info-btn:hover {
+      background-color: white; /* Background color on hover */
+      color: black; /* Text color on hover */
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
     }
 
-    .buttons-section button:active {
-      transform: translateY(2px); 
-      box-shadow: 0 2px #0e392b; 
-    }
-    .clearfix::after {
-        content: "";
-        display: table;
-        clear: both;
-    }
 
   </style>
 </head>
@@ -190,7 +209,7 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
     </div>
     <nav>
       <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-        <li class="about-us"><a href="aboutus.html" id="about-us-link">ABOUT US</a></li>
+        <li class="about-us"><a href="aboutus.html" id="about-us-link">About Us</a></li>
         <li><img src="<?php echo $profilePicture; ?>" alt="User Photo" class="user-photo" id="user-photo"></li> 
       </ul>
     </nav>
@@ -207,33 +226,20 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
         </div>
     </div>
   </div>
-
-  <div class="buttons-section">
-    <button onclick="window.location.href = 'profileinfo.php'">Profile</button>
-    <button onclick="window.location.href = 'recordsoflogin.html'">Records of Log in</button>
-    <button onclick="window.location.href = 'libraryplaces.php'">Library Places</button>
+  <div class="profile-infovertwo">
+    <p>Email: <?php echo $email; ?></p>
+    <p>Phone Number: <?php echo $phonenumber; ?></p>
+    <p>College/Department: <?php echo $college; ?></p>
+    <p>Program/Course: <?php echo $program; ?></p>
   </div>
 
-  <script>
-    // Add event listeners for navigation buttons
-    function navigateTo(section) {
-    switch (section) {
-        case 'profile':
-            window.location.href = 'profileinfo.html';
-            break;
-        case 'records':
-            alert('Navigating to Records of Log in');
-            // Add navigation logic here
-            break;
-        case 'library':
-            alert('Navigating to Library Places');
-            // Add navigation logic here
-            break;
-        default:
-            alert('Unknown section');
-    }
-}
+  <div class="edit-buttons">
+    <a href="edit_profile.php" class="edit-profile-btn">Edit Profile</a>
+    <a href="edit_information.php" class="edit-info-btn">Edit Information</a>
+  </div>
 
+  
+  <script>
     // Fetch user data and update profile info
     document.addEventListener('DOMContentLoaded', function() {
       // Update profile info using PHP-generated JSON
