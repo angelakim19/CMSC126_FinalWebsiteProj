@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YUPI Library Reservation</title>
     <style>
-       @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quiapo&family=Canva+Sans&display=swap');
-       @font-face {
+        /* Add your CSS styling here */
+        /* ... Existing styles ... */
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quiapo&family=Canva+Sans&display=swap');
+        @font-face {
             font-family: 'Quiapo';
             src: url('fonts/Quiapo-Regular.ttf') format('truetype');
         }
@@ -512,7 +514,60 @@
             bottom: 0;
             width: 100%;
         }
+        /* Style for the pop-up form */
+        .popup-form {
+            display: none; 
+            position: absolute; 
+            left: 50%; 
+            top: 50%; 
+            transform: translate(-50%, -50%); 
+            padding: 20px; 
+            background: #fff; 
+            border-radius: 10px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+            z-index: 1000; 
+            width: 300px;
+        }
 
+        .popup-form h3 {
+            margin: 0 0 15px;
+            color: #333;
+        }
+
+        .popup-form label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+        .popup-form input, .popup-form select, .popup-form button {
+            width: 100%; 
+            padding: 10px; 
+            margin: 5px 0 10px; 
+            border-radius: 5px;
+        }
+
+        .popup-form button {
+            background-color: #007b70;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .popup-form button:hover {
+            background-color: #005f50;
+        }
+
+        .overlay {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.5); 
+            z-index: 999; 
+        }
     </style>
 </head>
 <body>
@@ -543,16 +598,32 @@
             <div class="button-container">
                 <div class="button-row">
                     <div class="dropdown">
-                        <button onclick="showDropdown('reading-area-dropdown')">Reading Area
-                            <div class="hover-text">40 chairs available</div>
+                        <button id="show-reading-form">Reading Area
+                            <div class="hover-text" id="reading-area-hover">40 chairs available</div>
                         </button>
-                        <div class="dropdown-content" id="reading-area-dropdown"></div>
                     </div>
                     <div class="dropdown">
-                        <button onclick="showDropdown('comlab-dropdown')">Computer Laboratory
-                            <div class="hover-text">15 computers available</div>
+                        <button id="show-comlab-form">Computer Laboratory
+                            <div class="hover-text" id="comlab-hover">15 computers available</div>
                         </button>
-                        <div class="dropdown-content" id="comlab-dropdown"></div>
+                    </div>
+                    <div class="dropdown">
+                        <button id="show-mini-museum-form">Mini Museum
+                            <div class="hover-text">14 chairs available</div>
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button id="show-cafe-libro-form">Cafe Libro
+                            <div class="hover-text">12 chairs available</div>
+                        </button>
+                    </div>
+                </div>
+                <div class="button-row">
+                    <div class="dropdown">
+                        <button onclick="showDropdown('customer-service-dropdown')">Customer Service
+                            <div class="hover-text">OPEN</div>
+                        </button>
+                        <div class="dropdown-content" id="customer-service-dropdown"></div>
                     </div>
                     <div class="dropdown">
                         <button onclick="showDropdown('lemito-dropdown')">Lemito
@@ -566,40 +637,283 @@
                         </button>
                         <div class="dropdown-content" id="books-area-dropdown"></div>
                     </div>
-                </div>
-                <div class="button-row">
-                    <div class="dropdown">
-                        <button onclick="showDropdown('customer-service-dropdown')">Customer Service
-                            <div class="hover-text">OPEN</div>
-                        </button>
-                        <div class="dropdown-content" id="customer-service-dropdown"></div>
-                    </div>
-                    <div class="dropdown">
-                        <button onclick="showDropdown('mini-museum-dropdown')">Mini Museum
-                            <div class="hover-text">14 chairs available</div>
-                        </button>
-                        <div class="dropdown-content" id="mini-museum-dropdown"></div>
-                    </div>
-                    <div class="dropdown">
-                        <button onclick="showDropdown('cafe-libro-dropdown')">Cafe Libro
-                            <div class="hover-text">12 chairs available</div>
-                        </button>
-                        <div class="dropdown-content" id="cafe-libro-dropdown"></div>
-                    </div>
                     <button id="save-button" style="background-color: #007b70;">SAVE</button>
                 </div>
             </div>
         </div>
-        <div class="reservation-form" id="reservation-form">
-            <h3 id="place-name"></h3>
-            <form id="seat-form">
-                <button type="button" onclick="reserveSeat()">Reserve</button>
-                <button type="button" onclick="cancelSelection()">Cancel</button>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Reading Area Reservation Form -->
+    <div class="popup-form" id="reading-form">
+        <div class="close-btn">&times;</div>
+        <div class="form">
+            <h2>Reading Area Reservation</h2>
+            <form id="seat-form" action="process_reservation.php" method="POST">
+                <label for="reserved_by">Student ID:</label>
+                <input type="text" id="reserved_by" name="reserved_by" required>
+                
+                <label for="reservation_time">Reservation Time:</label>
+                <input type="datetime-local" id="reservation_time" name="reservation_time" required>
+                
+                <label for="table_number">Table Number:</label>
+                <select id="table_number" name="table_number" required></select>
+    
+                <label for="chairs">Number of Chairs:</label>
+                <input type="number" id="chairs" name="chairs" min="1" max="15" required>
+                
+                <label for="hours">Hours:</label>
+                <input type="number" id="hours" name="hours" min="1" max="12" required>
+                
+                <button type="submit">Reserve</button>
+                <button type="button" onclick="cancelReservation()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Computer Laboratory Reservation Form -->
+    <div class="popup-form" id="comlab-form">
+        <div class="close-btn">&times;</div>
+        <div class="form">
+            <h2>Computer Laboratory Reservation</h2>
+            <form id="computer-form" action="process_reservation.php" method="POST">
+                <label for="reserved_by_comlab">Student ID:</label>
+                <input type="text" id="reserved_by_comlab" name="reserved_by" required>
+                
+                <label for="reservation_time_comlab">Reservation Time:</label>
+                <input type="datetime-local" id="reservation_time_comlab" name="reservation_time" required>
+                
+                <label for="computer_number">Computer Number:</label>
+                <select id="computer_number" name="computer_number" required></select>
+                
+                <label for="hours_comlab">Hours:</label>
+                <input type="number" id="hours_comlab" name="hours" min="1" max="12" required>
+                
+                <button type="submit">Reserve</button>
+                <button type="button" onclick="cancelReservation()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mini Museum Reservation Form -->
+    <div class="popup-form" id="mini-museum-form">
+        <div class="close-btn">&times;</div>
+        <div class="form">
+            <h2>Mini Museum Reservation</h2>
+            <form id="museum-form" action="process_reservation.php" method="POST">
+                <label for="reserved_by_museum">Student ID:</label>
+                <input type="text" id="reserved_by_museum" name="reserved_by" required>
+                
+                <label for="reservation_time_museum">Reservation Time:</label>
+                <input type="datetime-local" id="reservation_time_museum" name="reservation_time" required>
+                
+                <label for="table_number_museum">Table Number:</label>
+                <select id="table_number_museum" name="table_number" required></select>
+                
+                <label for="chairs_museum">Number of Chairs:</label>
+                <input type="number" id="chairs_museum" name="chairs" min="1" max="1" required>
+                
+                <label for="hours_museum">Hours:</label>
+                <input type="number" id="hours_museum" name="hours" min="1" max="12" required>
+                
+                <button type="submit">Reserve</button>
+                <button type="button" onclick="cancelReservation()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cafe Libro Reservation Form -->
+    <div class="popup-form" id="cafe-libro-form">
+        <div class="close-btn">&times;</div>
+        <div class="form">
+            <h2>Cafe Libro Reservation</h2>
+            <form id="cafe-form" action="process_reservation.php" method="POST">
+                <label for="reserved_by_cafe">Student ID:</label>
+                <input type="text" id="reserved_by_cafe" name="reserved_by" required>
+                
+                <label for="reservation_time_cafe">Reservation Time:</label>
+                <input type="datetime-local" id="reservation_time_cafe" name="reservation_time" required>
+                
+                <label for="table_number_cafe">Table Number:</label>
+                <select id="table_number_cafe" name="table_number" required></select>
+                
+                <label for="chairs_cafe">Number of Chairs:</label>
+                <input type="number" id="chairs_cafe" name="chairs" min="1" max="1" required>
+                
+                <label for="hours_cafe">Hours:</label>
+                <input type="number" id="hours_cafe" name="hours" min="1" max="12" required>
+                
+                <button type="submit">Reserve</button>
+                <button type="button" onclick="cancelReservation()">Cancel</button>
             </form>
         </div>
     </div>
 
     <script>
+        document.getElementById("show-reading-form").addEventListener("click", function() {
+            document.getElementById("reading-form").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+            populateTableNumbers('table_number', 10);
+        });
+
+        document.getElementById("show-comlab-form").addEventListener("click", function() {
+            document.getElementById("comlab-form").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+            populateNumbers('computer_number', 15);
+        });
+
+        document.getElementById("show-mini-museum-form").addEventListener("click", function() {
+            document.getElementById("mini-museum-form").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+            populateTableNumbers('table_number_museum', 2);
+        });
+
+        document.getElementById("show-cafe-libro-form").addEventListener("click", function() {
+            document.getElementById("cafe-libro-form").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+            populateTableNumbers('table_number_cafe', 3);
+        });
+
+        document.querySelectorAll(".close-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                document.getElementById("reading-form").style.display = "none";
+                document.getElementById("comlab-form").style.display = "none";
+                document.getElementById("mini-museum-form").style.display = "none";
+                document.getElementById("cafe-libro-form").style.display = "none";
+                document.getElementById("overlay").style.display = "none";
+            });
+        });
+
+        function cancelReservation() {
+            document.getElementById("reading-form").style.display = "none";
+            document.getElementById("comlab-form").style.display = "none";
+            document.getElementById("mini-museum-form").style.display = "none";
+            document.getElementById("cafe-libro-form").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function populateTableNumbers(elementId, tableCount) {
+            let tableNumberSelect = document.getElementById(elementId);
+            tableNumberSelect.innerHTML = ''; // Clear previous options
+            for (let i = 1; i <= tableCount; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.text = `Table ${i}`;
+                tableNumberSelect.add(option);
+            }
+        }
+
+        function populateNumbers(elementId, count) {
+            let numberSelect = document.getElementById(elementId);
+            numberSelect.innerHTML = ''; // Clear previous options
+            for (let i = 1; i <= count; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.text = `${elementId.replace('_', ' ')} ${i}`;
+                numberSelect.add(option);
+            }
+        }
+
+        // Additional JavaScript Code
+        const availableChairs = {
+            readingArea: {
+                1: 7,
+                2: 5,
+                3: 6,
+                4: 4,
+                5: 8,
+                6: 3,
+                7: 9,
+                8: 2,
+                9: 1,
+                10: 6
+            },
+            miniMuseum: {
+                1: 4,
+                2: 5
+            },
+            cafeLibro: {
+                1: 2,
+                2: 1,
+                3: 3
+            },
+            lemito: 30 // Initial total seats available in Lemito
+        };
+
+        function calculateTotalAvailableChairs(area) {
+            if (typeof availableChairs[area] === 'number') {
+                return availableChairs[area];
+            }
+            const areaData = availableChairs[area];
+            return Object.values(areaData).reduce((total, numChairs) => total + numChairs, 0);
+        }
+
+        function updateHoverText() {
+            document.getElementById('reading-area-hover').innerText = `${calculateTotalAvailableChairs('readingArea')} chairs available`;
+            document.getElementById('mini-museum-hover').innerText = `${calculateTotalAvailableChairs('miniMuseum')} chairs available`;
+            document.getElementById('cafe-libro-hover').innerText = `${calculateTotalAvailableChairs('cafeLibro')} chairs available`;
+            document.getElementById('lemito-dropdown').innerText = `${calculateTotalAvailableChairs('lemito')} chairs available`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateHoverText();
+            restoreFormState();
+        });
+
+        function restoreFormState() {
+            const savedState = JSON.parse(localStorage.getItem('reservation-form-state'));
+            if (savedState) {
+                // Restore any saved state, such as selected table, chairs, etc.
+                console.log('Restoring saved state:', savedState);
+                // TODO: Populate the form fields with the saved state values
+            }
+
+            const bookBorrowingData = JSON.parse(localStorage.getItem('book-borrowing-data'));
+            if (bookBorrowingData) {
+                // Restore the book borrowing data
+                console.log('Restoring book borrowing data:', bookBorrowingData);
+                // TODO: Populate the necessary fields with book borrowing data
+                localStorage.removeItem('book-borrowing-data'); // Remove after restoring
+            }
+            
+            const lemitoReservationData = JSON.parse(localStorage.getItem('lemito-reservation-data'));
+            if (lemitoReservationData) {
+                console.log('Restoring lemito reservation data:', lemitoReservationData);
+                // TODO: Populate the necessary fields with lemito reservation data
+                localStorage.removeItem('lemito-reservation-data'); // Remove after restoring
+            }
+        }
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const area = form.id.includes('seat') ? 'readingArea' :
+                            form.id.includes('museum') ? 'miniMuseum' : 
+                            form.id.includes('cafe') ? 'cafeLibro' : 'lemito';
+                const tableNumber = form.querySelector('select[name="table_number"]').value;
+                const numChairs = form.querySelector('input[name="chairs"]').value;
+
+                if (area === 'lemito') {
+                    availableChairs[area] -= numChairs;
+                } else {
+                    availableChairs[area][tableNumber] -= numChairs;
+                }
+
+                updateHoverText();
+                saveFormState();
+            });
+        });
+
+        function saveFormState() {
+            const formState = {
+                // Collect current state of the form
+                // e.g., selectedTable: document.querySelector('select[name="table_number"]').value,
+                // numberOfChairs: document.querySelector('input[name="chairs"]').value
+            };
+            localStorage.setItem('reservation-form-state', JSON.stringify(formState));
+        }
+
         function showDropdown(dropdownId) {
             const dropdown = document.getElementById(dropdownId);
             const isVisible = dropdown.style.display === 'block';
@@ -616,12 +930,6 @@
         function populateDropdown(dropdownId) {
             let content = '';
             switch (dropdownId) {
-                case 'reading-area-dropdown':
-                    content = getReadingAreaContent();
-                    break;
-                case 'comlab-dropdown':
-                    content = getComLabContent();
-                    break;
                 case 'lemito-dropdown':
                     content = getLemitoContent();
                     break;
@@ -630,12 +938,6 @@
                     break;
                 case 'customer-service-dropdown':
                     content = getCustomerServiceContent();
-                    break;
-                case 'mini-museum-dropdown':
-                    content = getMiniMuseumContent();
-                    break;
-                case 'cafe-libro-dropdown':
-                    content = getCafeLibroContent();
                     break;
             }
             document.getElementById(dropdownId).innerHTML = content + getDropdownButtons(dropdownId);
@@ -648,28 +950,6 @@
                     <button onclick="cancelSelection('${dropdownId}')">Cancel</button>
                 </div>
             `;
-        }
-
-        function getReadingAreaContent() {
-            let content = '';
-            for (let i = 1; i <= 6; i++) {
-                let availableSeats = 7; // Replace with dynamic value from the database
-                content += `<label class="container">Table ${i} - ${availableSeats} seats left <input type="radio" name="seat" value="Table ${i}"><span class="checkmark"></span></label><div class="dropdown-divider"></div>`;
-            }
-            for (let i = 1; i <= 12; i++) {
-                let availableSeats = 1; // Replace with dynamic value from the database
-                content += `<label class="container">Table ${i} - ${availableSeats} seats left <input type="radio" name="seat" value="Table ${i}"><span class="checkmark"></span></label><div class="dropdown-divider"></div>`;
-            }
-            return content;
-        }
-
-        function getComLabContent() {
-            let content = '';
-            for (let i = 1; i <= 15; i++) {
-                let status = 'available'; // Replace with dynamic value from the database
-                content += `<label class="container">Computer ${i} - ${status} <input type="radio" name="seat" value="Computer ${i}"><span class="checkmark"></span></label><div class="dropdown-divider"></div>`;
-            }
-            return content;
         }
 
         function getLemitoContent() {
@@ -692,33 +972,33 @@
             `;
         }
 
-        function getMiniMuseumContent() {
-            let content = '';
-            for (let i = 1; i <= 2; i++) {
-                let availableSeats = 7; // Replace with dynamic value from the database
-                content += `<label class="container">Table ${i} - ${availableSeats} seats left <input type="radio" name="seat" value="Table ${i}"><span class="checkmark"></span></label><div class="dropdown-divider"></div>`;
-            }
-            return content;
-        }
-
-        function getCafeLibroContent() {
-            let content = '';
-            for (let i = 1; i <= 3; i++) {
-                for (let j = 1; j <= 4; j++) {
-                    let status = 'available'; // Replace with dynamic value from the database
-                    content += `<label class="container">Table ${i} - Chair ${j} - ${status} <input type="radio" name="seat" value="Table ${i} - Chair ${j}"><span class="checkmark"></span></label><div class="dropdown-divider"></div>`;
-                }
-            }
-            return content;
-        }
-
         function reserveSeat(dropdownId) {
-            alert(`Reservation has been made for ${dropdownId}.`);
-            // Add reservation logic here
+            const selectedOption = document.querySelector(`#${dropdownId} input[name="option"]:checked`);
+            if (selectedOption) {
+                const value = selectedOption.value;
+                if (dropdownId === 'lemito-dropdown') {
+                    if (value === 'Reserve') {
+                        saveFormState();
+                        window.location.href = 'lemito_reservation.html';
+                    } else if (value === 'Attend') {
+                        // Update available seats dynamically
+                        availableChairs['lemito'] -= 1;
+                        updateHoverText();
+                        alert('Seat reserved for attending Lemito.');
+                    }
+                } else if (dropdownId === 'books-area-dropdown' && value === 'Borrow Books') {
+                    saveFormState();
+                    window.location.href = 'borrow_book.html';
+                } else {
+                    alert('No action for the selected option.');
+                }
+            } else {
+                alert('Please select an option.');
+            }
         }
 
         function cancelSelection(dropdownId) {
-            document.querySelectorAll(`#${dropdownId} input[name="seat"]:checked`).forEach(input => {
+            document.querySelectorAll(`#${dropdownId} input[name="option"]:checked`).forEach(input => {
                 input.checked = false;
             });
             alert(`Selection cancelled for ${dropdownId}.`);
@@ -745,7 +1025,6 @@
             });
         });
     </script>
-
 </body>
 <footer><p>© 2024 YUPI Library. All rights reserved.</p></footer>
 </html>

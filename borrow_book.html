@@ -199,7 +199,16 @@
         document.getElementById('borrow-book-form').addEventListener('submit', function(event) {
             event.preventDefault();
             alert('Successfully Borrowed Book!');
-            window.location.href = 'index.html';
+            // Store form data to localStorage
+            localStorage.setItem('book-borrowing-data', JSON.stringify({
+                quantity: document.getElementById('quantity').value,
+                bookTitle: document.getElementById('book-title').value,
+                author: document.getElementById('author').value,
+                isbn: document.getElementById('isbn').value,
+                borrowingDate: document.getElementById('borrowing-date').value,
+                dueDate: document.getElementById('due-date').value
+            }));
+            window.location.href = 'reserve_seat.html';
         });
     </script>
 </body>
