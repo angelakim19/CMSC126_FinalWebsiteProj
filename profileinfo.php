@@ -229,7 +229,7 @@ $profilePicture = $user['profile_picture'] ? htmlspecialchars($user['profile_pic
     </div>
     <nav>
       <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-        <li class="about-us"><a href="about_us.html" id="about-us-link">About Us</a></li>
+        <li class="about-us"><a href="aboutus.html" id="about-us-link">About Us</a></li>
         <li><img src="<?php echo $profilePicture; ?>" alt="User Photo" class="user-photo" id="user-photo"></li> 
       </ul>
     </nav>

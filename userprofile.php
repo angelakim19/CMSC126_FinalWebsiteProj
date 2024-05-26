@@ -191,7 +191,7 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
     </div>
     <nav>
       <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-        <li class="about-us"><a href="about_us.html" id="about-us-link">ABOUT US</a></li>
+        <li class="about-us"><a href="aboutus.html" id="about-us-link">ABOUT US</a></li>
         <li><img src="<?php echo $profilePicture; ?>" alt="User Photo" class="user-photo" id="user-photo"></li> 
       </ul>
     </nav>
