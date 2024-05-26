@@ -211,8 +211,8 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
 
   <div class="buttons-section">
     <button onclick="window.location.href = 'profileinfo.php'">Profile</button>
-    <button onclick="window.location.href = 'recordsoflogin.html'">Records of Log in</button>
-    <button onclick="window.location.href = 'libraryplaces.php'">Library Places</button>
+    <button onclick="window.location.href = 'studentPanel_log_ofRecords.html'">Records of Log in</button>
+    <button onclick="window.location.href = 'reserve_seat.html'">Library Places</button>
   </div>
 
   <script>
