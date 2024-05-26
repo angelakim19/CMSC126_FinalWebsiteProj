@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'upload.php'; // Include the upload script
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $firstname = $_POST['firstname'];
@@ -16,10 +17,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hash the password before storing
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
+    // Handle file upload
+    try {
+        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == UPLOAD_ERR_OK) {
+            $profile_picture_path = uploadProfilePicture($_FILES['profile_picture']);
+        } else {
+            $profile_picture_path = null;
+        }
+    } catch (Exception $e) {
+        die($e->getMessage());
+    }
+
     // Database connection
     $servername = "localhost"; 
     $username = "root"; 
-    $dbpassword = "your_password"; 
+    $dbpassword = "your_password"; // Use the correct password for the MySQL root user
     $dbname = "registration_db";
 
     // Create connection
@@ -30,13 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Prepare and bind
-    $stmt = $conn->prepare("INSERT INTO users (firstname, middlename, lastname, studentnumber, email, college, program, phonenumber, position, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    // Insert user data
+    $stmt = $conn->prepare("INSERT INTO users (firstname, middlename, lastname, studentnumber, email, college, program, phonenumber, position, password, profile_picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     if ($stmt === false) {
         die("Prepare failed: " . $conn->error);
     }
 
-    $bind = $stmt->bind_param("ssssssssss", $firstname, $middlename, $lastname, $studentnumber, $email, $college, $program, $phonenumber, $position, $hashed_password);
+    $bind = $stmt->bind_param("sssssssssss", $firstname, $middlename, $lastname, $studentnumber, $email, $college, $program, $phonenumber, $position, $hashed_password, $profile_picture_path);
     if ($bind === false) {
         die("Bind failed: " . $stmt->error);
     }

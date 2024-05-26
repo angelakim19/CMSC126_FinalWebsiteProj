@@ -28,7 +28,8 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
       background-repeat: no-repeat;
       color: white;
       text-align: center;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .logo {
