@@ -9,7 +9,7 @@ if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_
 
 $servername = "localhost"; 
 $username = "root"; 
-$dbpassword = "your_password"; // Use the correct password for the MySQL root user
+$dbpassword = ""; // Use the correct password for the MySQL root user
 $dbname = "registration_db";
 
 // Create connection

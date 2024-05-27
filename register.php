@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Database connection
     $servername = "localhost"; 
     $username = "root"; 
-    $dbpassword = "your_password"; // Use the correct password for the MySQL root user
+    $dbpassword = ""; // Use the correct password for the MySQL root user
     $dbname = "registration_db";
 
     // Create connection
