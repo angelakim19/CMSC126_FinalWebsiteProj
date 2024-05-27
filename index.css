@@ -174,14 +174,7 @@ div.mvg .goal {
     align-self: flex-start;
     padding: 20px;
     margin-top: 10px;
-}
-
-div.mvg .mission:hover,
-div.mvg .vision:hover,
-div.mvg .goal:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #333;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+    z-index: 3;
 }
 
 div.mvg .logoyupi {
