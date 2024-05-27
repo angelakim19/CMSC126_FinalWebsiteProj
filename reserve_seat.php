@@ -601,17 +601,17 @@ $conn->close();
             <h1>Library Spaces</h1>
         </div>
         <div class="user-info" style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
-        <div class="clearfix">
-    <div class="profile-section">
-        <div class="profile-info-container style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
-            <img src="<?php echo $profilePicture; ?>" alt="User Photo" class="profile-photo">
-            <div class="profile-info">
-                <h2><?php echo $firstname . " " . $lastname; ?></h2>
-                <p><?php echo $studentnumber; ?></p>
+            <div class="clearfix">
+                <div class="profile-section">
+                    <div class="profile-info-container" style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
+                        <img src="default_userp.png" alt="User Photo" class="profile-photo">
+                        <div class="profile-info">
+                            <h2>First Last</h2>
+                            <p>Student Number</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-  </div>
         </div>
         <div class="library-places">
             <div class="button-container">
@@ -669,23 +669,23 @@ $conn->close();
         <div class="close-btn">&times;</div>
         <div class="form">
             <h2>Reading Area Reservation</h2>
-            <form id="seat-form">
+            <form id="reading-area-form">
                 <label for="reserved_by">Student ID:</label>
-                <input type="text" id="reserved_by" name="reserved_by" required>
+                <input type="text" id="reserved_by_reading" name="reserved_by" required>
                 
                 <label for="reservation_time">Reservation Time:</label>
-                <input type="datetime-local" id="reservation_time" name="reservation_time" required>
+                <input type="datetime-local" id="reservation_time_reading" name="reservation_time" required>
                 
                 <label for="table_number">Table Number:</label>
-                <select id="table_number" name="table_number" required></select>
+                <select id="table_number_reading" name="table_number" required></select>
     
                 <label for="chairs">Number of Chairs:</label>
-                <input type="number" id="chairs" name="chairs" min="1" max="15" required>
+                <input type="number" id="chairs_reading" name="chairs" min="1" max="15" required>
                 
                 <label for="hours">Hours:</label>
-                <input type="number" id="hours" name="hours" min="1" max="12" required>
+                <input type="number" id="hours_reading" name="hours" min="1" max="12" required>
                 
-                <button type="button" onclick="saveFormState()">Reserve</button>
+                <button type="button" onclick="addTemporaryReservation('reading-area-form', 'Reading Area')">Reserve</button>
                 <button type="button" onclick="cancelReservation()">Cancel</button>
             </form>
         </div>
@@ -696,7 +696,7 @@ $conn->close();
         <div class="close-btn">&times;</div>
         <div class="form">
             <h2>Computer Laboratory Reservation</h2>
-            <form id="computer-form">
+            <form id="comlab-reservation-form">
                 <label for="reserved_by_comlab">Student ID:</label>
                 <input type="text" id="reserved_by_comlab" name="reserved_by" required>
                 
@@ -709,7 +709,7 @@ $conn->close();
                 <label for="hours_comlab">Hours:</label>
                 <input type="number" id="hours_comlab" name="hours" min="1" max="12" required>
                 
-                <button type="button" onclick="saveFormState()">Reserve</button>
+                <button type="button" onclick="addTemporaryReservation('comlab-reservation-form', 'Computer Laboratory')">Reserve</button>
                 <button type="button" onclick="cancelReservation()">Cancel</button>
             </form>
         </div>
@@ -720,7 +720,7 @@ $conn->close();
         <div class="close-btn">&times;</div>
         <div class="form">
             <h2>Mini Museum Reservation</h2>
-            <form id="museum-form">
+            <form id="mini-museum-reservation-form">
                 <label for="reserved_by_museum">Student ID:</label>
                 <input type="text" id="reserved_by_museum" name="reserved_by" required>
                 
@@ -736,7 +736,7 @@ $conn->close();
                 <label for="hours_museum">Hours:</label>
                 <input type="number" id="hours_museum" name="hours" min="1" max="12" required>
                 
-                <button type="button" onclick="saveFormState()">Reserve</button>
+                <button type="button" onclick="addTemporaryReservation('mini-museum-reservation-form', 'Mini Museum')">Reserve</button>
                 <button type="button" onclick="cancelReservation()">Cancel</button>
             </form>
         </div>
@@ -747,7 +747,7 @@ $conn->close();
         <div class="close-btn">&times;</div>
         <div class="form">
             <h2>Cafe Libro Reservation</h2>
-            <form id="cafe-form">
+            <form id="cafe-libro-reservation-form">
                 <label for="reserved_by_cafe">Student ID:</label>
                 <input type="text" id="reserved_by_cafe" name="reserved_by" required>
                 
@@ -763,65 +763,80 @@ $conn->close();
                 <label for="hours_cafe">Hours:</label>
                 <input type="number" id="hours_cafe" name="hours" min="1" max="12" required>
                 
-                <button type="button" onclick="saveFormState()">Reserve</button>
+                <button type="button" onclick="addTemporaryReservation('cafe-libro-reservation-form', 'Cafe Libro')">Reserve</button>
                 <button type="button" onclick="cancelReservation()">Cancel</button>
             </form>
         </div>
     </div>
 
     <script>
+        let temporaryReservations = [];
+
         document.getElementById("show-reading-form").addEventListener("click", function() {
-            document.getElementById("reading-form").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-            populateTableNumbers('table_number', 10);
+            showPopupForm("reading-form", 'table_number_reading', 10);
         });
 
         document.getElementById("show-comlab-form").addEventListener("click", function() {
-            document.getElementById("comlab-form").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-            populateNumbers('computer_number', 15);
+            showPopupForm("comlab-form", 'computer_number', 15);
         });
 
         document.getElementById("show-mini-museum-form").addEventListener("click", function() {
-            document.getElementById("mini-museum-form").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-            populateTableNumbers('table_number_museum', 2);
+            showPopupForm("mini-museum-form", 'table_number_museum', 2);
         });
 
         document.getElementById("show-cafe-libro-form").addEventListener("click", function() {
-            document.getElementById("cafe-libro-form").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-            populateTableNumbers('table_number_cafe', 3);
+            showPopupForm("cafe-libro-form", 'table_number_cafe', 3);
         });
+
+        function showPopupForm(formId, selectId, count) {
+            document.getElementById(formId).style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+            populateNumbers(selectId, count);
+        }
 
         document.querySelectorAll(".close-btn").forEach(button => {
-            button.addEventListener("click", function() {
-                document.getElementById("reading-form").style.display = "none";
-                document.getElementById("comlab-form").style.display = "none";
-                document.getElementById("mini-museum-form").style.display = "none";
-                document.getElementById("cafe-libro-form").style.display = "none";
-                document.getElementById("overlay").style.display = "none";
-            });
+            button.addEventListener("click", closePopupForms);
         });
 
-        function cancelReservation() {
-            document.getElementById("reading-form").style.display = "none";
-            document.getElementById("comlab-form").style.display = "none";
-            document.getElementById("mini-museum-form").style.display = "none";
-            document.getElementById("cafe-libro-form").style.display = "none";
+        function closePopupForms() {
+            document.querySelectorAll(".popup-form").forEach(form => form.style.display = "none");
             document.getElementById("overlay").style.display = "none";
         }
 
-        function populateTableNumbers(elementId, tableCount) {
-            let tableNumberSelect = document.getElementById(elementId);
-            tableNumberSelect.innerHTML = ''; // Clear previous options
-            for (let i = 1; i <= tableCount; i++) {
-                let option = document.createElement('option');
-                option.value = i;
-                option.text = `Table ${i}`;
-                tableNumberSelect.add(option);
-            }
+        function cancelReservation() {
+            closePopupForms();
         }
+
+        function addTemporaryReservation(formId, area) {
+            const form = document.getElementById(formId);
+            const formData = new FormData(form);
+            const reservation = {
+                area: area,
+                reserved_by: formData.get("reserved_by"),
+                reservation_time: formData.get("reservation_time"),
+                table_number: formData.get("table_number"),
+                chairs: formData.get("chairs"),
+                hours: formData.get("hours")
+            };
+            temporaryReservations.push(reservation);
+            alert(`Temporary reservation for ${area} added.`);
+            closePopupForms();
+        }
+
+        document.getElementById("save-button").addEventListener("click", function() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "reserve_seat.php", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert("Reservations saved successfully!");
+                    temporaryReservations = []; // Clear temporary reservations after saving
+                } else {
+                    alert("Error saving reservations: " + xhr.responseText);
+                }
+            };
+            xhr.send(JSON.stringify(temporaryReservations));
+        });
 
         function populateNumbers(elementId, count) {
             let numberSelect = document.getElementById(elementId);
@@ -829,108 +844,9 @@ $conn->close();
             for (let i = 1; i <= count; i++) {
                 let option = document.createElement('option');
                 option.value = i;
-                option.text = `${elementId.replace('_', ' ')} ${i}`;
+                option.text = `Table ${i}`;
                 numberSelect.add(option);
             }
-        }
-
-        // Additional JavaScript Code
-        const availableChairs = {
-            readingArea: {
-                1: 7,
-                2: 5,
-                3: 6,
-                4: 4,
-                5: 8,
-                6: 3,
-                7: 9,
-                8: 2,
-                9: 1,
-                10: 6
-            },
-            miniMuseum: {
-                1: 4,
-                2: 5
-            },
-            cafeLibro: {
-                1: 2,
-                2: 1,
-                3: 3
-            },
-            lemito: 30 // Initial total seats available in Lemito
-        };
-
-        function calculateTotalAvailableChairs(area) {
-            if (typeof availableChairs[area] === 'number') {
-                return availableChairs[area];
-            }
-            const areaData = availableChairs[area];
-            return Object.values(areaData).reduce((total, numChairs) => total + numChairs, 0);
-        }
-
-        function updateHoverText() {
-            document.getElementById('reading-area-hover').innerText = `${calculateTotalAvailableChairs('readingArea')} chairs available`;
-            document.getElementById('mini-museum-hover').innerText = `${calculateTotalAvailableChairs('miniMuseum')} chairs available`;
-            document.getElementById('cafe-libro-hover').innerText = `${calculateTotalAvailableChairs('cafeLibro')} chairs available`;
-            document.getElementById('lemito-dropdown').innerText = `${calculateTotalAvailableChairs('lemito')} chairs available`;
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            updateHoverText();
-            restoreFormState();
-        });
-
-        function restoreFormState() {
-            const savedState = JSON.parse(localStorage.getItem('reservation-form-state'));
-            if (savedState) {
-                // Restore any saved state, such as selected table, chairs, etc.
-                console.log('Restoring saved state:', savedState);
-                // TODO: Populate the form fields with the saved state values
-            }
-
-            const bookBorrowingData = JSON.parse(localStorage.getItem('book-borrowing-data'));
-            if (bookBorrowingData) {
-                // Restore the book borrowing data
-                console.log('Restoring book borrowing data:', bookBorrowingData);
-                // TODO: Populate the necessary fields with book borrowing data
-                localStorage.removeItem('book-borrowing-data'); // Remove after restoring
-            }
-            
-            const lemitoReservationData = JSON.parse(localStorage.getItem('lemito-reservation-data'));
-            if (lemitoReservationData) {
-                console.log('Restoring lemito reservation data:', lemitoReservationData);
-                // TODO: Populate the necessary fields with lemito reservation data
-                localStorage.removeItem('lemito-reservation-data'); // Remove after restoring
-            }
-        }
-
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const area = form.id.includes('seat') ? 'readingArea' :
-                            form.id.includes('museum') ? 'miniMuseum' : 
-                            form.id.includes('cafe') ? 'cafeLibro' : 'lemito';
-                const tableNumber = form.querySelector('select[name="table_number"]').value;
-                const numChairs = form.querySelector('input[name="chairs"]').value;
-
-                if (area === 'lemito') {
-                    availableChairs[area] -= numChairs;
-                } else {
-                    availableChairs[area][tableNumber] -= numChairs;
-                }
-
-                updateHoverText();
-                saveFormState();
-            });
-        });
-
-        function saveFormState() {
-            const formState = {
-                // Collect current state of the form
-                // e.g., selectedTable: document.querySelector('select[name="table_number"]').value,
-                // numberOfChairs: document.querySelector('input[name="chairs"]').value
-            };
-            localStorage.setItem('reservation-form-state', JSON.stringify(formState));
         }
 
         function showDropdown(dropdownId) {
@@ -1043,54 +959,6 @@ $conn->close();
                 radio.checked = false;
             });
         });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Fetching user info');
-            fetch('fetch_user_info.php')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Fetched data:', data);
-                    if (data.error) {
-                        console.error('Error:', data.error);
-                    } else {
-                        document.getElementById('user-name').innerText = `${data.firstname} ${data.lastname}`;
-                        document.getElementById('student-number').innerText = data.studentnumber;
-                    }
-                })
-                .catch(error => console.error('Error fetching user info:', error));
-        });
-
-        document.getElementById("save-button").addEventListener("click", function() {
-    const reservations = [];
-    const areas = ["readingArea", "miniMuseum", "cafeLibro"];
-    areas.forEach(area => {
-        const forms = document.querySelectorAll(`#${area}-form form`);
-        forms.forEach(form => {
-            const formData = new FormData(form);
-            reservations.push({
-                area: area,
-                reserved_by: formData.get("reserved_by"),
-                reservation_time: formData.get("reservation_time"),
-                table_number: formData.get("table_number"),
-                chairs: formData.get("chairs"),
-                hours: formData.get("hours")
-            });
-        });
-    });
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "reserve_seat.php", true);  // Ensure this path is correct
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            alert("Reservations saved successfully!");
-        } else {
-            alert("Error saving reservations: " + xhr.responseText);
-        }
-    };
-    xhr.send(JSON.stringify(reservations));
-});
     </script>
 </body>
-<footer><p>© 2024 YUPI Library. All rights reserved.</p></footer>
 </html>
