@@ -25,8 +25,6 @@ $conn->close();
     <title>YUPI Library Reservation</title>
     <style>
        
-        /* Add your CSS styling here */
-        /* ... Existing styles ... */
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quiapo&family=Canva+Sans&display=swap');
         @font-face {
             font-family: 'Quiapo';
