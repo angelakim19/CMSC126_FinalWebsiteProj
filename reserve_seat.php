@@ -636,7 +636,7 @@ $conn->close();
 
         /* The Modal (background) */
         .modal {
-            display: flexbox; /* Hidden by default */
+            display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
             z-index: 20; /* Sit on top of other elements */
             left: 50%;
@@ -670,8 +670,12 @@ $conn->close();
             cursor: pointer;
         }
 
-        .profile-info h2{
+        .profile-info {
+            color: #0b0e0d;
             
+        }
+        .profile-info h2{
+            color: #0b0e0d;
             margin-top: 235px;
         }
     </style>
@@ -679,6 +683,13 @@ $conn->close();
 </head>
 
 <body>
+    <!-- Modal structure -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
     <div class="container">
         <div class="navigation-bar">
             <div class="logo">
@@ -755,13 +766,7 @@ $conn->close();
                 </div>
             </div>
         </div>
-        <!-- Modal structure -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modal-body"></div>
-        </div>
-    </div>
+        
     </div>
 
     <div class="overlay" id="overlay"></div>
