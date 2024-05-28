@@ -22,7 +22,7 @@ if ($conn->connect_error) {
 
 // Fetch user data
 $studentnumber = $_SESSION['studentnumber'];
-$stmt = $conn->prepare("SELECT firstname, middlename, lastname, email, college, program, phonenumber, position, profile_picture FROM users WHERE studentnumber = ?");
+$stmt = $conn->prepare("SELECT id, firstname, middlename, lastname, email, college, program, phonenumber, position, profile_picture FROM users WHERE studentnumber = ?");
 $stmt->bind_param("s", $studentnumber);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -38,7 +38,6 @@ $conn->close();
 
 $profilePicture = $user['profile_picture'] ? htmlspecialchars($user['profile_picture']) : 'default_userp.png';
 
-// Pass user data to the HTML
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -163,7 +162,7 @@ $profilePicture = $user['profile_picture'] ? htmlspecialchars($user['profile_pic
     .profile-info h2 {
       margin: 0;
       font-size: 24px;
-      margin-top: -200px;
+      margin-top: -170px;
       color: white;
     }
 
@@ -171,7 +170,7 @@ $profilePicture = $user['profile_picture'] ? htmlspecialchars($user['profile_pic
       margin: 5px 0 0;
       font-size: 18px;
       font-weight: bold;
-      margin-top: -160px;
+      margin-top: -170px;
       margin-left: -265px;
       color: white;
     }
@@ -229,7 +228,7 @@ $profilePicture = $user['profile_picture'] ? htmlspecialchars($user['profile_pic
     </div>
     <nav>
       <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-        <li class="about-us"><a href="about_us.html" id="about-us-link">About Us</a></li>
+        <li class="about-us"><a href="aboutus.html" id="about-us-link">About Us</a></li>
         <li><img src="<?php echo $profilePicture; ?>" alt="User Photo" class="user-photo" id="user-photo"></li> 
       </ul>
     </nav>
@@ -240,18 +239,20 @@ $profilePicture = $user['profile_picture'] ? htmlspecialchars($user['profile_pic
         <div class="profile-info-container">
             <img src="<?php echo $profilePicture; ?>" alt="User Photo" class="profile-photo">
             <div class="profile-info">
-                <h2><?php echo htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['middlename']) . ' ' . htmlspecialchars($user['lastname']); ?></h2>
-                <p><?php echo htmlspecialchars($user['studentnumber']); ?></p>
+                <h2><?php echo htmlspecialchars($user['firstname']) . ' ' .  htmlspecialchars($user['lastname']); ?></h2>
+                <!-- Check if 'studentnumber' key exists before accessing it -->
+                
             </div>
         </div>
     </div>
-  </div>
-  <div class="profile-infovertwo">
+</div>
+<div class="profile-infovertwo">
     <p>Email: <?php echo htmlspecialchars($user['email']); ?></p>
     <p>Phone Number: <?php echo htmlspecialchars($user['phonenumber']); ?></p>
     <p>College/Department: <?php echo htmlspecialchars($user['college']); ?></p>
     <p>Program/Course: <?php echo htmlspecialchars($user['program']); ?></p>
-  </div>
+</div>
+
 
   <div class="edit-buttons">
     <a href="edit_profile.php" class="edit-profile-btn">Edit Profile</a>

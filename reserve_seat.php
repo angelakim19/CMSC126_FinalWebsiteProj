@@ -143,10 +143,11 @@ $conn->close();
 
 
         .profile-info-container {
+            display: grid;
             position: fixed;
-            top: 150px; /* Adjust as needed */
+            top: 180px; /* Adjust as needed */
             left: 20px; /* Adjust as needed */
-            z-index: 100; /* Ensure it stays on top */ ;
+            
         }
 
 
@@ -156,13 +157,13 @@ $conn->close();
             border-radius: 50%;
             margin-right: 20px;
             margin-left: -5px;
-            margin-top: 100px;
+            margin-top: 140px;
             border: 5px solid white;
         }
 
 
         .text-info {
-            margin-top: 60px;
+            margin-top: 90px;
             margin-left: 30px;
             color: black;
             text-align: left;
@@ -635,7 +636,7 @@ $conn->close();
 
         /* The Modal (background) */
         .modal {
-            display: none; /* Hidden by default */
+            display: flexbox; /* Hidden by default */
             position: fixed; /* Stay in place */
             z-index: 20; /* Sit on top of other elements */
             left: 50%;
@@ -669,6 +670,10 @@ $conn->close();
             cursor: pointer;
         }
 
+        .profile-info h2{
+            
+            margin-top: 235px;
+        }
     </style>
 
 </head>
@@ -682,7 +687,7 @@ $conn->close();
             </div>
             <nav>
                 <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-                    <li class="about-us"><a href="#" id="about-us-link">ABOUT US</a></li>
+                    <li class="about-us"><a href="aboutus.html" id="about-us-link">About Us</a></li>
                     <li><img src="default_userp.png" alt="User Photo" class="user-photo" id="user-photo"></li>
                 </ul>
             </nav>
@@ -691,18 +696,18 @@ $conn->close();
             <h1>Library Spaces</h1>
         </div>
         <div class="user-info" style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
-            <div class="clearfix">
-                <div class="profile-section">
-                    <div class="profile-info-container" style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
-                        <img src="default_userp.png" alt="User Photo" class="profile-photo">
-                        <div class="profile-info">
-                            <h2>First Last</h2>
-                            <p>Student Number</p>
-                        </div>
+        <div class="clearfix">
+            <div class="profile-section">
+                <div class="profile-info-container" style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
+                    <img src="default_userp.png" alt="User Photo" class="profile-photo">
+                    <div class="profile-info">
+                        <h2><?php echo $firstname . ' ' . $lastname; ?></h2>
+                        <p><?php echo $studentnumber; ?></p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
         <div class="library-places">
             <div class="button-container">
                 <div class="button-row">

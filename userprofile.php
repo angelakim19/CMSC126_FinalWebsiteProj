@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_SESSION['studentnumber'])) {
+// Check if user is logged in or just registered
+if (!isset($_SESSION['loggedin']) || !isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_SESSION['studentnumber'])) {
     header("Location: register.php");
     exit();
 }
@@ -191,7 +192,7 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
     </div>
     <nav>
       <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-        <li class="about-us"><a href="aboutus.html" id="about-us-link">ABOUT US</a></li>
+        <li class="about-us"><a href="aboutus.html" id="about-us-link">About Us</a></li>
         <li><img src="<?php echo $profilePicture; ?>" alt="User Photo" class="user-photo" id="user-photo"></li> 
       </ul>
     </nav>

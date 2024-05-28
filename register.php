@@ -14,8 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $position = $_POST['position'];        
     $password = $_POST['password'];
 
-    // Hash the password before storing
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Handle file upload
     try {
@@ -48,10 +46,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Prepare failed: " . $conn->error);
     }
 
-    $bind = $stmt->bind_param("sssssssssss", $firstname, $middlename, $lastname, $studentnumber, $email, $college, $program, $phonenumber, $position, $hashed_password, $profile_picture_path);
+    $bind = $stmt->bind_param("sssssssssss", $firstname, $middlename, $lastname, $studentnumber, $email, $college, $program, $phonenumber, $position, $password, $profile_picture_path);
     if ($bind === false) {
         die("Bind failed: " . $stmt->error);
     }
+
+ 
 
     if ($stmt->execute()) {
         $_SESSION['firstname'] = $firstname;
