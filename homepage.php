@@ -13,7 +13,11 @@
           margin: 0;
           padding: 0;
           overflow: hidden; /* Prevent scrolling */
+          background-image: url('upmlibrary.png'); 
+          background-size: cover;
+          overflow-x: hidden;
       }
+            
 
       header {
           background-color: #00573F;
@@ -143,6 +147,7 @@
             border-radius: 25px;
             box-shadow: -5px -5px 10px rgb(238, 228, 227), 5px 5px 10px rgba(0, 0, 0, 0.485);
             margin: 20px;
+            
         }
 
         .button-user {
@@ -151,7 +156,8 @@
         }
 
         .button-admin {
-            background-color: darkgreen /* UP Maroon */
+            background-color: #00573F; /* UP Maroon */
+            margin-left:-100px;
         }
 
         .button:hover {

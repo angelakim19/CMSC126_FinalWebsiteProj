@@ -24,20 +24,17 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YUPI Library Reservation</title>
     <style>
-       
+        /* Add your CSS styling here */
+        /* ... Existing styles ... */
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quiapo&family=Canva+Sans&display=swap');
         @font-face {
             font-family: 'Quiapo';
             src: url('fonts/Quiapo-Regular.ttf') format('truetype');
         }
-
-
         @font-face {
             font-family: 'Canva Sans';
             src: url('fonts/CanvaSans-Regular.ttf') format('truetype');
         }
-
-
         body, html {
             margin: 0;
             padding: 0;
@@ -51,27 +48,19 @@ $conn->close();
             overflow-x: hidden;
             overflow-y: auto;
         }
-
-
         .logo {
             display: flex;
             align-items: center;
         }
-
-
         .logo img {
             width: 80px;
             margin-left: 20px;
         }
-
-
         .logo-text {
             color: white;
             font-size: 24px;
             font-weight: bold;
         }
-
-
         .navigation-bar {
             background-color: #14533c;
             height: 80px;
@@ -83,8 +72,6 @@ $conn->close();
             top: 0;
             z-index: 1000;
         }
-
-
         .user-photo {
             width: 40px;
             height: 40px;
@@ -93,15 +80,11 @@ $conn->close();
             margin-right: 20px;
             cursor: pointer;
         }
-
-
         .about-us {
             display: flex;
             align-items: center;
             margin-left: 20px;
         }
-
-
         .about-us a {
             color: white;
             text-decoration: none;
@@ -110,21 +93,15 @@ $conn->close();
             font-family: Arial, sans-serif;
             font-weight: bold;
         }
-
-
         h1 {
             margin-top: 120px;
             font-size: 48px;
             font-weight: bold;
         }
-
-
         p {
             font-size: 24px;
             margin-top: 10px;
         }
-
-
         .profile-section {
             background-color: transparent;
             padding: 20px;
@@ -140,51 +117,38 @@ $conn->close();
             flex-direction: row-reverse;
             position: relative;
         }
-
-
         .profile-info-container {
-            display: grid;
             position: fixed;
-            top: 180px; /* Adjust as needed */
+            top: 150px; /* Adjust as needed */
             left: 20px; /* Adjust as needed */
-            
+            z-index: 100; /* Ensure it stays on top */ ;
         }
-
-
         .profile-photo {
             width: 300px;
             height: 300px;
             border-radius: 50%;
             margin-right: 20px;
             margin-left: -5px;
-            margin-top: 140px;
+            margin-top: 100px;
             border: 5px solid white;
         }
-
-
         .text-info {
-            margin-top: 90px;
+            margin-top: 60px;
             margin-left: 30px;
             color: black;
             text-align: left;
             font-family: 'Fredoka One', sans-serif;
         }
-
-
         .text-info .name {
             font-size: 64px;
             margin-bottom: -60px;
             margin: 0;
         }
-
-
         .text-info .student-number {
             font-size: 18px;
             margin: 5px 0 0;
             margin-bottom: -60px;
         }
-
-
         .buttons-section {
             margin-top: -22px;
             display: flex;
@@ -194,13 +158,9 @@ $conn->close();
             padding-left: 25%;
             padding-top: 10px;
         }
-
-
         .button-container {
             margin-top: -22px;
         }
-
-
         .buttons-section button {
             background-color: #96c1b1;
             color: white;
@@ -215,36 +175,26 @@ $conn->close();
             font-family: 'Canva Sans', sans-serif;
             text-align: center;
         }
-
-
         .buttons-section button:hover {
             background-color: #7a0422;
             transform: translateY(-2px);
             box-shadow: 0 6px #495954;
         }
-
-
         .buttons-section button:active {
             transform: translateY(2px);
             box-shadow: 0 2px #0e392b;
         }
-
-
         .clearfix::after {
             content: "";
             display: table;
             clear: both;
         }
-
-
         .library-cover {
             height: 300px;
             width: 100%;
             margin-top: 80px;
             position: relative;
         }
-
-
         .library-cover h1 {
             position: absolute;
             top: 50%;
@@ -256,8 +206,6 @@ $conn->close();
             z-index: 1;
             text-align: center;
         }
-
-
         .library-places {
             display: flex;
             flex-wrap: wrap;
@@ -266,8 +214,6 @@ $conn->close();
             margin-left: 120px;
             padding: 10px;
         }
-
-
         .library-places button {
             margin-left: 200px;
             display: inline-flex;
@@ -289,35 +235,25 @@ $conn->close();
             box-shadow: inset -5px -5px 10px rgb(88, 84, 84),
             inset 5px 5px 10px rgba(120, 110, 110, 0.485);
         }
-
-
         .library-places button:hover {
             background-color: #202423;
         }
-
-
         .library-places .available-seats {
             display: block;
             font-size: 14px;
             color: #fff;
         }
-
-
         .reservation-form {
             display: none;
             margin-top: 20px;
             text-align: center;
         }
-
-
         .reservation-form select {
             padding: 10px;
             font-size: 16px;
             margin-bottom: 10px;
             font-family: 'Fredoka One', sans-serif;
         }
-
-
         .reservation-form button {
             display: flex;
             padding: 10px 20px;
@@ -329,35 +265,25 @@ $conn->close();
             cursor: pointer;
             font-family: 'Fredoka One', sans-serif;
         }
-
-
         .reservation-form button:hover {
             background-color: #005f50;
         }
-
-
         .button-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             padding-top: 20px;
         }
-
-
         .button-row {
             display: flex;
             justify-content: center;
             width: 100%;
             margin-bottom: 20px;
         }
-
-
         .dropdown {
             margin-left: 10px;
             position: relative;
         }
-
-
         .dropdown-content {
             display: none;
             position: absolute;
@@ -375,8 +301,6 @@ $conn->close();
             border-radius: 5px;
             margin-left: 0;
         }
-
-
         .dropdown-content button {
             display: inline-block;
             width: 48%;
@@ -390,20 +314,14 @@ $conn->close();
             cursor: pointer;
             font-family: 'Fredoka One', sans-serif;
         }
-
-
         .dropdown-content button:hover {
             background-color: #005f50;
         }
-
-
         .dropdown-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
         }
-
-
         .dropdown-buttons button {
             flex: 1;
             margin: 0 5px;
@@ -416,34 +334,22 @@ $conn->close();
             cursor: pointer;
             font-family: 'Fredoka One', sans-serif;
         }
-
-
         .dropdown-buttons button:hover {
             background-color: #0b0e0d;
         }
-
-
         .dropdown-content::-webkit-scrollbar {
             width: 10px;
             overflow-y: auto;
         }
-
-
         .dropdown-content::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
-
-
         .dropdown-content::-webkit-scrollbar-thumb {
             background: #888;
         }
-
-
         .dropdown-content::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
-
-
         .container {
             display: block;
             align-items: center;
@@ -454,8 +360,6 @@ $conn->close();
             font-size: 18px;
             user-select: none;
         }
-
-
         .container input {
             position: absolute;
             opacity: 0;
@@ -463,8 +367,6 @@ $conn->close();
             height: 0;
             width: 0;
         }
-
-
         .container label {
             padding-left: 40px;
             display: flex;
@@ -473,8 +375,6 @@ $conn->close();
             width: 100%;
             box-sizing: border-box;
         }
-
-
         .checkmark {
             margin-right: 15px;
             position: absolute;
@@ -484,30 +384,20 @@ $conn->close();
             background-color: #eee;
             border-radius: 50%;
         }
-
-
         .container:hover input ~ .checkmark {
             background-color: #bb5151;
         }
-
-
         .container input:checked ~ .checkmark {
             background-color: #2196F3;
         }
-
-
         .checkmark:after {
             content: "";
             position: absolute;
             display: none;
         }
-
-
         .container input:checked ~ .checkmark:after {
             display: block;
         }
-
-
         .checkmark:after {
             top: 9px;
             left: 9px;
@@ -516,16 +406,12 @@ $conn->close();
             border-radius: 50%;
             background: white;
         }
-
-
         .dropdown-divider {
             height: 1px;
             margin: 0.5rem 0;
             overflow: hidden;
             background-color: #e9ecef;
         }
-
-
         .hover-text {
             width: 100%;
             height: 100%;
@@ -539,31 +425,21 @@ $conn->close();
             text-align: center;
             z-index: 2;
         }
-
-
         .button-container .button-row button:hover .hover-text {
             display: flex;
             justify-content: center;
             align-items: center;
         }
-
-
         .occupied {
             color: red;
         }
-
-
         .available {
             color: green;
         }
-
-
         .dropdown-content label span {
             display: flex;
             align-items: center;
         }
-
-
         .footer {
             background-color: rgb(18, 17, 17);
             color: white;
@@ -587,42 +463,30 @@ $conn->close();
             z-index: 1000;
             width: 300px;
         }
-
-
         .popup-form h3 {
             margin: 0 0 15px;
             color: #333;
         }
-
-
         .popup-form label {
             display: block;
             margin: 10px 0 5px;
             color: #333;
         }
-
-
         .popup-form input, .popup-form select, .popup-form button {
             width: 100%;
             padding: 10px;
             margin: 5px 0 10px;
             border-radius: 5px;
         }
-
-
         .popup-form button {
             background-color: #007b70;
             color: white;
             border: none;
             cursor: pointer;
         }
-
-
         .popup-form button:hover {
             background-color: #005f50;
         }
-
-
         .overlay {
             display: none;
             position: fixed;
@@ -633,7 +497,6 @@ $conn->close();
             background: rgba(0,0,0,0.5);
             z-index: 999;
         }
-
         /* The Modal (background) */
         .modal {
             display: none; /* Hidden by default */
@@ -649,12 +512,10 @@ $conn->close();
             border-radius: 10px; /* Rounded corners */
             overflow: hidden; /* Ensure content fits within modal */
         }
-
         /* Modal Content */
         .modal-content {
             padding: 20px;
         }
-
         /* The Close Button */
         .close {
             color: #aaa;
@@ -662,34 +523,16 @@ $conn->close();
             font-size: 28px;
             font-weight: bold;
         }
-
         .close:hover,
         .close:focus {
             color: black;
             text-decoration: none;
             cursor: pointer;
         }
-
-        .profile-info {
-            color: #0b0e0d;
-            
-        }
-        .profile-info h2{
-            color: #0b0e0d;
-            margin-top: 235px;
-        }
     </style>
-
 </head>
 
 <body>
-    <!-- Modal structure -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modal-body"></div>
-        </div>
-    </div>
     <div class="container">
         <div class="navigation-bar">
             <div class="logo">
@@ -698,7 +541,7 @@ $conn->close();
             </div>
             <nav>
                 <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-                    <li class="about-us"><a href="aboutus.html" id="about-us-link">About Us</a></li>
+                    <li class="about-us"><a href="#" id="about-us-link">ABOUT US</a></li>
                     <li><img src="default_userp.png" alt="User Photo" class="user-photo" id="user-photo"></li>
                 </ul>
             </nav>
@@ -707,18 +550,18 @@ $conn->close();
             <h1>Library Spaces</h1>
         </div>
         <div class="user-info" style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
-        <div class="clearfix">
-            <div class="profile-section">
-                <div class="profile-info-container" style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
-                    <img src="default_userp.png" alt="User Photo" class="profile-photo">
-                    <div class="profile-info">
-                        <h2><?php echo $firstname . ' ' . $lastname; ?></h2>
-                        <p><?php echo $studentnumber; ?></p>
+            <div class="clearfix">
+                <div class="profile-section">
+                    <div class="profile-info-container" style="display: flex; align-items: center; justify-content: left; padding-left: 20px;">
+                        <img src="default_userp.png" alt="User Photo" class="profile-photo">
+                        <div class="profile-info">
+                <div style="font-size: 24px; font-weight: bold; color: black;"><?= htmlspecialchars($firstname . " " . $lastname) ?></div>
+                <div style="font-size: 18px; color: black;"><?= htmlspecialchars($studentnumber) ?></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
         <div class="library-places">
             <div class="button-container">
                 <div class="button-row">
@@ -766,16 +609,20 @@ $conn->close();
                 </div>
             </div>
         </div>
-        
+        <!-- Modal structure -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
     </div>
 
     <div class="overlay" id="overlay"></div>
 
     <div id="form-container"></div> <!-- Container to load forms dynamically -->
 
-    
-
-        <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Get the modal
             const modal = document.getElementById("modal");
@@ -824,8 +671,6 @@ $conn->close();
                 showModal('<iframe src="cafelibro_input.php" width="100%" height="500px"></iframe>');
             }
         });
-
-        let temporaryReservations = [];
 
         function showDropdown(dropdownId) {
             const dropdown = document.getElementById(dropdownId);
@@ -888,7 +733,13 @@ $conn->close();
         function reserveSeat(dropdownId) {
             const selectedOption = document.querySelector(`#${dropdownId} input[name="option"]:checked`);
             if (selectedOption) {
-                alert(`Reserved for ${selectedOption.value}`);
+                if (dropdownId === 'lemito-dropdown' && selectedOption.value === 'Reserve') {
+                    window.location.href = 'lemito_reservation.php';
+                } else if (dropdownId === 'books-area-dropdown' && selectedOption.value === 'Borrow Books') {
+                    window.location.href = 'borrow_book.php';
+                } else {
+                    alert(`Reserved for ${selectedOption.value}`);
+                }
             } else {
                 alert('Please select an option before reserving.');
             }
