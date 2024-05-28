@@ -14,27 +14,9 @@ $profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSI
 // Include the database connection
 include 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $student_id = $_SESSION['user_id'];
-    $place_name = $_POST['place_name'];
-    $reservation_date = $_POST['reservation_date'];
-    $reserved_chairs = $_POST['reserved_chairs'];
-    $reserved_hours = $_POST['reserved_hours'];
-
-    $stmt = $conn->prepare("INSERT INTO library_places (student_id, place_name, reservation_date, reserved_chairs, reserved_hours) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("issii", $student_id, $place_name, $reservation_date, $reserved_chairs, $reserved_hours);
-
-    if ($stmt->execute()) {
-        echo "Reservation successful!";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    $stmt->close();
-}
-
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,6 +24,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YUPI Library Reservation</title>
     <style>
+       
         /* Add your CSS styling here */
         /* ... Existing styles ... */
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quiapo&family=Canva+Sans&display=swap');
@@ -50,10 +33,12 @@ $conn->close();
             src: url('fonts/Quiapo-Regular.ttf') format('truetype');
         }
 
+
         @font-face {
             font-family: 'Canva Sans';
             src: url('fonts/CanvaSans-Regular.ttf') format('truetype');
         }
+
 
         body, html {
             margin: 0;
@@ -69,15 +54,18 @@ $conn->close();
             overflow-y: auto;
         }
 
+
         .logo {
             display: flex;
             align-items: center;
         }
 
+
         .logo img {
             width: 80px;
             margin-left: 20px;
         }
+
 
         .logo-text {
             color: white;
@@ -85,32 +73,36 @@ $conn->close();
             font-weight: bold;
         }
 
+
         .navigation-bar {
             background-color: #14533c;
             height: 80px;
             width: 100%;
             display: flex;
-            justify-content: space-between; 
+            justify-content: space-between;
             align-items: center;
             position: fixed;
             top: 0;
             z-index: 1000;
         }
 
+
         .user-photo {
             width: 40px;
             height: 40px;
             border: 2px solid rgb(91, 88, 88);
             border-radius: 50%;
-            margin-right: 30px;
+            margin-right: 20px;
             cursor: pointer;
         }
+
 
         .about-us {
             display: flex;
             align-items: center;
             margin-left: 20px;
         }
+
 
         .about-us a {
             color: white;
@@ -121,16 +113,19 @@ $conn->close();
             font-weight: bold;
         }
 
+
         h1 {
             margin-top: 120px;
             font-size: 48px;
             font-weight: bold;
         }
 
+
         p {
             font-size: 24px;
             margin-top: 10px;
         }
+
 
         .profile-section {
             background-color: transparent;
@@ -148,6 +143,7 @@ $conn->close();
             position: relative;
         }
 
+
         .profile-info-container {
             position: fixed;
             top: 150px; /* Adjust as needed */
@@ -155,33 +151,40 @@ $conn->close();
             z-index: 100; /* Ensure it stays on top */ ;
         }
 
+
         .profile-photo {
-            width: 250px;
-            height: 250px;
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
             margin-right: 20px;
-            margin-left: 35px;
-            margin-top: -40px;
+            margin-left: -5px;
+            margin-top: 100px;
             border: 5px solid white;
         }
 
+
         .text-info {
-            margin-top: 20px;
+            margin-top: 60px;
             margin-left: 30px;
             color: black;
             text-align: left;
             font-family: 'Fredoka One', sans-serif;
         }
 
+
         .text-info .name {
-            font-size: 24px;
+            font-size: 64px;
+            margin-bottom: -60px;
             margin: 0;
         }
+
 
         .text-info .student-number {
             font-size: 18px;
             margin: 5px 0 0;
+            margin-bottom: -60px;
         }
+
 
         .buttons-section {
             margin-top: -22px;
@@ -193,9 +196,11 @@ $conn->close();
             padding-top: 10px;
         }
 
+
         .button-container {
             margin-top: -22px;
         }
+
 
         .buttons-section button {
             background-color: #96c1b1;
@@ -212,16 +217,19 @@ $conn->close();
             text-align: center;
         }
 
+
         .buttons-section button:hover {
             background-color: #7a0422;
             transform: translateY(-2px);
             box-shadow: 0 6px #495954;
         }
 
+
         .buttons-section button:active {
             transform: translateY(2px);
             box-shadow: 0 2px #0e392b;
         }
+
 
         .clearfix::after {
             content: "";
@@ -229,12 +237,14 @@ $conn->close();
             clear: both;
         }
 
+
         .library-cover {
             height: 300px;
             width: 100%;
             margin-top: 80px;
             position: relative;
         }
+
 
         .library-cover h1 {
             position: absolute;
@@ -248,6 +258,7 @@ $conn->close();
             text-align: center;
         }
 
+
         .library-places {
             display: flex;
             flex-wrap: wrap;
@@ -256,6 +267,7 @@ $conn->close();
             margin-left: 120px;
             padding: 10px;
         }
+
 
         .library-places button {
             margin-left: 200px;
@@ -279,9 +291,11 @@ $conn->close();
             inset 5px 5px 10px rgba(120, 110, 110, 0.485);
         }
 
+
         .library-places button:hover {
             background-color: #202423;
         }
+
 
         .library-places .available-seats {
             display: block;
@@ -289,11 +303,13 @@ $conn->close();
             color: #fff;
         }
 
+
         .reservation-form {
             display: none;
             margin-top: 20px;
             text-align: center;
         }
+
 
         .reservation-form select {
             padding: 10px;
@@ -301,6 +317,7 @@ $conn->close();
             margin-bottom: 10px;
             font-family: 'Fredoka One', sans-serif;
         }
+
 
         .reservation-form button {
             display: flex;
@@ -314,9 +331,11 @@ $conn->close();
             font-family: 'Fredoka One', sans-serif;
         }
 
+
         .reservation-form button:hover {
             background-color: #005f50;
         }
+
 
         .button-container {
             display: flex;
@@ -325,6 +344,7 @@ $conn->close();
             padding-top: 20px;
         }
 
+
         .button-row {
             display: flex;
             justify-content: center;
@@ -332,10 +352,12 @@ $conn->close();
             margin-bottom: 20px;
         }
 
+
         .dropdown {
             margin-left: 10px;
             position: relative;
         }
+
 
         .dropdown-content {
             display: none;
@@ -355,6 +377,7 @@ $conn->close();
             margin-left: 0;
         }
 
+
         .dropdown-content button {
             display: inline-block;
             width: 48%;
@@ -369,15 +392,18 @@ $conn->close();
             font-family: 'Fredoka One', sans-serif;
         }
 
+
         .dropdown-content button:hover {
             background-color: #005f50;
         }
+
 
         .dropdown-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
         }
+
 
         .dropdown-buttons button {
             flex: 1;
@@ -392,26 +418,32 @@ $conn->close();
             font-family: 'Fredoka One', sans-serif;
         }
 
+
         .dropdown-buttons button:hover {
             background-color: #0b0e0d;
         }
+
 
         .dropdown-content::-webkit-scrollbar {
             width: 10px;
             overflow-y: auto;
         }
 
+
         .dropdown-content::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
+
 
         .dropdown-content::-webkit-scrollbar-thumb {
             background: #888;
         }
 
+
         .dropdown-content::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
 
         .container {
             display: block;
@@ -424,6 +456,7 @@ $conn->close();
             user-select: none;
         }
 
+
         .container input {
             position: absolute;
             opacity: 0;
@@ -431,6 +464,7 @@ $conn->close();
             height: 0;
             width: 0;
         }
+
 
         .container label {
             padding-left: 40px;
@@ -440,6 +474,7 @@ $conn->close();
             width: 100%;
             box-sizing: border-box;
         }
+
 
         .checkmark {
             margin-right: 15px;
@@ -451,13 +486,16 @@ $conn->close();
             border-radius: 50%;
         }
 
+
         .container:hover input ~ .checkmark {
             background-color: #bb5151;
         }
 
+
         .container input:checked ~ .checkmark {
             background-color: #2196F3;
         }
+
 
         .checkmark:after {
             content: "";
@@ -465,9 +503,11 @@ $conn->close();
             display: none;
         }
 
+
         .container input:checked ~ .checkmark:after {
             display: block;
         }
+
 
         .checkmark:after {
             top: 9px;
@@ -478,12 +518,14 @@ $conn->close();
             background: white;
         }
 
+
         .dropdown-divider {
             height: 1px;
             margin: 0.5rem 0;
             overflow: hidden;
             background-color: #e9ecef;
         }
+
 
         .hover-text {
             width: 100%;
@@ -499,24 +541,29 @@ $conn->close();
             z-index: 2;
         }
 
+
         .button-container .button-row button:hover .hover-text {
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+
         .occupied {
             color: red;
         }
+
 
         .available {
             color: green;
         }
 
+
         .dropdown-content label span {
             display: flex;
             align-items: center;
         }
+
 
         .footer {
             background-color: rgb(18, 17, 17);
@@ -529,23 +576,25 @@ $conn->close();
         }
         /* Style for the pop-up form */
         .popup-form {
-            display: none; 
-            position: absolute; 
-            left: 50%; 
-            top: 50%; 
-            transform: translate(-50%, -50%); 
-            padding: 20px; 
-            background: #fff; 
-            border-radius: 10px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-            z-index: 1000; 
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
             width: 300px;
         }
+
 
         .popup-form h3 {
             margin: 0 0 15px;
             color: #333;
         }
+
 
         .popup-form label {
             display: block;
@@ -553,12 +602,14 @@ $conn->close();
             color: #333;
         }
 
+
         .popup-form input, .popup-form select, .popup-form button {
-            width: 100%; 
-            padding: 10px; 
-            margin: 5px 0 10px; 
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
             border-radius: 5px;
         }
+
 
         .popup-form button {
             background-color: #007b70;
@@ -567,22 +618,63 @@ $conn->close();
             cursor: pointer;
         }
 
+
         .popup-form button:hover {
             background-color: #005f50;
         }
 
+
         .overlay {
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0,0,0,0.5); 
-            z-index: 999; 
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
         }
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 20; /* Sit on top of other elements */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* Center the modal */
+            width: 80%; /* Adjust the width as needed */
+            max-width: 600px; /* Maximum width */
+            background-color: white; /* Background color */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Add some shadow for depth */
+            border-radius: 10px; /* Rounded corners */
+            overflow: hidden; /* Ensure content fits within modal */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            padding: 20px;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
     </style>
+
 </head>
+
 <body>
     <div class="container">
         <div class="navigation-bar">
@@ -656,198 +748,76 @@ $conn->close();
                         </button>
                         <div class="dropdown-content" id="books-area-dropdown"></div>
                     </div>
-                    <button id="save-button" style="background-color: #007b70;">SAVE</button>
+                    <button id="save-button" style="background-color: #007b70;">LOG OUT</button>
                 </div>
             </div>
         </div>
+        <!-- Modal structure -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
     </div>
 
     <div class="overlay" id="overlay"></div>
 
-    <!-- Reading Area Reservation Form -->
-    <div class="popup-form" id="reading-form">
-        <div class="close-btn">&times;</div>
-        <div class="form">
-            <h2>Reading Area Reservation</h2>
-            <form id="reading-area-form">
-                <label for="reserved_by">Student ID:</label>
-                <input type="text" id="reserved_by_reading" name="reserved_by" required>
-                
-                <label for="reservation_time">Reservation Time:</label>
-                <input type="datetime-local" id="reservation_time_reading" name="reservation_time" required>
-                
-                <label for="table_number">Table Number:</label>
-                <select id="table_number_reading" name="table_number" required></select>
+    <div id="form-container"></div> <!-- Container to load forms dynamically -->
+
     
-                <label for="chairs">Number of Chairs:</label>
-                <input type="number" id="chairs_reading" name="chairs" min="1" max="15" required>
-                
-                <label for="hours">Hours:</label>
-                <input type="number" id="hours_reading" name="hours" min="1" max="12" required>
-                
-                <button type="button" onclick="addTemporaryReservation('reading-area-form', 'Reading Area')">Reserve</button>
-                <button type="button" onclick="cancelReservation()">Cancel</button>
-            </form>
-        </div>
-    </div>
 
-    <!-- Computer Laboratory Reservation Form -->
-    <div class="popup-form" id="comlab-form">
-        <div class="close-btn">&times;</div>
-        <div class="form">
-            <h2>Computer Laboratory Reservation</h2>
-            <form id="comlab-reservation-form">
-                <label for="reserved_by_comlab">Student ID:</label>
-                <input type="text" id="reserved_by_comlab" name="reserved_by" required>
-                
-                <label for="reservation_time_comlab">Reservation Time:</label>
-                <input type="datetime-local" id="reservation_time_comlab" name="reservation_time" required>
-                
-                <label for="computer_number">Computer Number:</label>
-                <select id="computer_number" name="computer_number" required></select>
-                
-                <label for="hours_comlab">Hours:</label>
-                <input type="number" id="hours_comlab" name="hours" min="1" max="12" required>
-                
-                <button type="button" onclick="addTemporaryReservation('comlab-reservation-form', 'Computer Laboratory')">Reserve</button>
-                <button type="button" onclick="cancelReservation()">Cancel</button>
-            </form>
-        </div>
-    </div>
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the modal
+            const modal = document.getElementById("modal");
+            const modalBody = document.getElementById("modal-body");
+            const span = document.getElementsByClassName("close")[0];
 
-    <!-- Mini Museum Reservation Form -->
-    <div class="popup-form" id="mini-museum-form">
-        <div class="close-btn">&times;</div>
-        <div class="form">
-            <h2>Mini Museum Reservation</h2>
-            <form id="mini-museum-reservation-form">
-                <label for="reserved_by_museum">Student ID:</label>
-                <input type="text" id="reserved_by_museum" name="reserved_by" required>
-                
-                <label for="reservation_time_museum">Reservation Time:</label>
-                <input type="datetime-local" id="reservation_time_museum" name="reservation_time" required>
-                
-                <label for="table_number_museum">Table Number:</label>
-                <select id="table_number_museum" name="table_number" required></select>
-                
-                <label for="chairs_museum">Number of Chairs:</label>
-                <input type="number" id="chairs_museum" name="chairs" min="1" max="1" required>
-                
-                <label for="hours_museum">Hours:</label>
-                <input type="number" id="hours_museum" name="hours" min="1" max="12" required>
-                
-                <button type="button" onclick="addTemporaryReservation('mini-museum-reservation-form', 'Mini Museum')">Reserve</button>
-                <button type="button" onclick="cancelReservation()">Cancel</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Cafe Libro Reservation Form -->
-    <div class="popup-form" id="cafe-libro-form">
-        <div class="close-btn">&times;</div>
-        <div class="form">
-            <h2>Cafe Libro Reservation</h2>
-            <form id="cafe-libro-reservation-form">
-                <label for="reserved_by_cafe">Student ID:</label>
-                <input type="text" id="reserved_by_cafe" name="reserved_by" required>
-                
-                <label for="reservation_time_cafe">Reservation Time:</label>
-                <input type="datetime-local" id="reservation_time_cafe" name="reservation_time" required>
-                
-                <label for="table_number_cafe">Table Number:</label>
-                <select id="table_number_cafe" name="table_number" required></select>
-                
-                <label for="chairs_cafe">Number of Chairs:</label>
-                <input type="number" id="chairs_cafe" name="chairs" min="1" max="1" required>
-                
-                <label for="hours_cafe">Hours:</label>
-                <input type="number" id="hours_cafe" name="hours" min="1" max="12" required>
-                
-                <button type="button" onclick="addTemporaryReservation('cafe-libro-reservation-form', 'Cafe Libro')">Reserve</button>
-                <button type="button" onclick="cancelReservation()">Cancel</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        let temporaryReservations = [];
-
-        document.getElementById("show-reading-form").addEventListener("click", function() {
-            showPopupForm("reading-form", 'table_number_reading', 10);
-        });
-
-        document.getElementById("show-comlab-form").addEventListener("click", function() {
-            showPopupForm("comlab-form", 'computer_number', 15);
-        });
-
-        document.getElementById("show-mini-museum-form").addEventListener("click", function() {
-            showPopupForm("mini-museum-form", 'table_number_museum', 2);
-        });
-
-        document.getElementById("show-cafe-libro-form").addEventListener("click", function() {
-            showPopupForm("cafe-libro-form", 'table_number_cafe', 3);
-        });
-
-        function showPopupForm(formId, selectId, count) {
-            document.getElementById(formId).style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-            populateNumbers(selectId, count);
-        }
-
-        document.querySelectorAll(".close-btn").forEach(button => {
-            button.addEventListener("click", closePopupForms);
-        });
-
-        function closePopupForms() {
-            document.querySelectorAll(".popup-form").forEach(form => form.style.display = "none");
-            document.getElementById("overlay").style.display = "none";
-        }
-
-        function cancelReservation() {
-            closePopupForms();
-        }
-
-        function addTemporaryReservation(formId, area) {
-            const form = document.getElementById(formId);
-            const formData = new FormData(form);
-            const reservation = {
-                area: area,
-                reserved_by: formData.get("reserved_by"),
-                reservation_time: formData.get("reservation_time"),
-                table_number: formData.get("table_number"),
-                chairs: formData.get("chairs"),
-                hours: formData.get("hours")
-            };
-            temporaryReservations.push(reservation);
-            alert(`Temporary reservation for ${area} added.`);
-            closePopupForms();
-        }
-
-        document.getElementById("save-button").addEventListener("click", function() {
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "reserve_seat.php", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    alert("Reservations saved successfully!");
-                    temporaryReservations = []; // Clear temporary reservations after saving
-                } else {
-                    alert("Error saving reservations: " + xhr.responseText);
-                }
-            };
-            xhr.send(JSON.stringify(temporaryReservations));
-        });
-
-        function populateNumbers(elementId, count) {
-            let numberSelect = document.getElementById(elementId);
-            numberSelect.innerHTML = ''; // Clear previous options
-            for (let i = 1; i <= count; i++) {
-                let option = document.createElement('option');
-                option.value = i;
-                option.text = `Table ${i}`;
-                numberSelect.add(option);
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+                document.body.style.overflow = ''; // Restore body scrolling
             }
-        }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    document.body.style.overflow = ''; // Restore body scrolling
+                }
+            }
+
+            // Function to show the modal with specific content
+            function showModal(content) {
+                modalBody.innerHTML = content;
+                modal.style.display = "block";
+                document.body.style.overflow = 'hidden'; // Prevent body from scrolling
+            }
+
+            // Attach event listeners to buttons
+            document.getElementById("show-reading-form").onclick = function(event) {
+                event.preventDefault();
+                showModal('<iframe src="reading_areainput.php" width="100%" height="500px"></iframe>');
+            }
+
+            document.getElementById("show-comlab-form").onclick = function(event) {
+                event.preventDefault();
+                showModal('<iframe src="computer_labinput.php" width="100%" height="500px"></iframe>');
+            }
+
+            document.getElementById("show-mini-museum-form").onclick = function(event) {
+                event.preventDefault();
+                showModal('<iframe src="museum_reservationinput.php" width="100%" height="500px"></iframe>');
+            }
+
+            document.getElementById("show-cafe-libro-form").onclick = function(event) {
+                event.preventDefault();
+                showModal('<iframe src="cafelibro_input.php" width="100%" height="500px"></iframe>');
+            }
+        });
+
+        let temporaryReservations = [];
 
         function showDropdown(dropdownId) {
             const dropdown = document.getElementById(dropdownId);
@@ -910,55 +880,16 @@ $conn->close();
         function reserveSeat(dropdownId) {
             const selectedOption = document.querySelector(`#${dropdownId} input[name="option"]:checked`);
             if (selectedOption) {
-                const value = selectedOption.value;
-                if (dropdownId === 'lemito-dropdown') {
-                    if (value === 'Reserve') {
-                        saveFormState();
-                        window.location.href = 'lemito_reservation.html';
-                    } else if (value === 'Attend') {
-                        // Update available seats dynamically
-                        availableChairs['lemito'] -= 1;
-                        updateHoverText();
-                        alert('Seat reserved for attending Lemito.');
-                    }
-                } else if (dropdownId === 'books-area-dropdown' && value === 'Borrow Books') {
-                    saveFormState();
-                    window.location.href = 'borrow_book.html';
-                } else {
-                    alert('No action for the selected option.');
-                }
+                alert(`Reserved for ${selectedOption.value}`);
             } else {
-                alert('Please select an option.');
+                alert('Please select an option before reserving.');
             }
         }
 
         function cancelSelection(dropdownId) {
-            document.querySelectorAll(`#${dropdownId} input[name="option"]:checked`).forEach(input => {
-                input.checked = false;
-            });
-            alert(`Selection cancelled for ${dropdownId}.`);
+            document.getElementById(dropdownId).style.display = 'none';
+            document.body.style.overflow = ''; // Restore body scrolling
         }
-
-        window.addEventListener('click', function(event) {
-            if (!event.target.matches('.dropdown-content') && !event.target.matches('.dropdown *')) {
-                document.querySelectorAll('.dropdown-content').forEach(dropdown => {
-                    dropdown.style.display = 'none';
-                });
-                document.body.style.overflow = ''; // Restore body scrolling
-            }
-        });
-
-        document.querySelectorAll('.dropdown-content').forEach(dropdown => {
-            dropdown.addEventListener('click', function(event) {
-                event.stopPropagation();
-            });
-        });
-
-        document.querySelectorAll('.dropdown-content input[type="radio"]').forEach(radio => {
-            radio.addEventListener('dblclick', function() {
-                radio.checked = false;
-            });
-        });
     </script>
 </body>
 </html>
