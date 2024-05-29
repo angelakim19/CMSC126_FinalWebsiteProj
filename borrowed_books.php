@@ -63,9 +63,13 @@ $result = $conn->query($sql);
     </table>
     <br>
     <button type="submit" name="action" value="edit">Edit Selected</button>
+   
     <button type="submit" name="action" value="delete">Delete Selected</button>
+</form>
+
     <button onclick="location.href='add_book.php'">Add Book Borrowed</button>
 </form>
+<button onclick="location.href='admin_dashboard.html'">Back to Admin Dashboard</button>
 
 <?php
 $conn->close();

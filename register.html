@@ -126,8 +126,8 @@
     </div>
     <div class="header-buttons">
         <button type="button" onclick="redirectToRegister()">Register</button>
-        <button type="button" onclick="redirectToLogin()">Log In</button>
-        <button type="button" onclick="redirectToAboutUs()">About Us</button>
+        <button type="button" onclick="redirecttToLogin()">Log In</button>
+        <button type="button" onclick="redirecttToAboutUs()">About Us</button>
     </div>
   </header>
 
@@ -250,6 +250,20 @@
     </div>
 </footer>
 
-  <script src="redirect.js"></script>
+<script> function redirectToRegister() {
+  window.location.href = 'register.html'; 
+}
+
+function redirecttToLogin() {
+  window.location.href = 'login.html'; 
+}
+
+function redirecttToAboutUs() {
+  window.location.href = 'aboutus.html'; 
+}
+
+function redirectToHome() {
+  window.location.href = 'index.html';
+}</script>
 </body>
 </html>

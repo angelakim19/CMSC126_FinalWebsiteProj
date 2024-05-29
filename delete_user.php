@@ -1,22 +1,23 @@
 <?php
-include 'db.php';
+session_start();
+if (!isset($_SESSION['admin_logged_in'])) {
+    header("Location: admin_login.php");
+    exit();
+}
 
-if (isset($_POST['user_id'])) {
-    $user_id = $_POST['user_id'];
-    
-    $sql = "DELETE FROM users WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
+include 'db_connection.php';
 
-    if ($stmt->execute()) {
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $sql = "DELETE FROM users WHERE id='$id'";
+    if ($conn->query($sql) === TRUE) {
         echo "User deleted successfully";
     } else {
-        echo "Error deleting user: " . $stmt->error;
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
-    $stmt->close();
     $conn->close();
-} else {
-    echo "No user ID provided";
+    header("Location: view_users.php");
 }
 ?>

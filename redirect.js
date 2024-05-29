@@ -13,3 +13,11 @@ function redirectToAboutUs() {
 function redirectToHome() {
     window.location.href = 'index.html';
 }
+
+function redirectToUserProfile() {
+    window.location.href = 'userprofile.php';
+}
+
+function redirectToAdminDashboard() {
+    window.location.href= 'admin_dashboard.html'
+}

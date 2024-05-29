@@ -1,24 +1,52 @@
 <?php
-include 'db.php';
+// Database connection parameters
+$servername = "localhost";
+$username = "root";
+$password = "your_password";
+$dbname = "registration_db";
 
-// Assuming user ID is passed via session or another method
-session_start();
-$user_id = $_SESSION['user_id'] ?? 1; // Replace with actual user ID retrieval logic
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-$sql = "SELECT log_date, log_in, log_out, places_visited FROM log_records WHERE user_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-$log_records = [];
-
-while ($row = $result->fetch_assoc()) {
-    $log_records[] = $row;
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$stmt->close();
-$conn->close();
+// SQL query to fetch user activity data
+$sql = "
+    SELECT 
+        u.id AS user_id, 
+        CONCAT(u.lastname, ', ', u.firstname, ' ', u.middlename) AS user_name, 
+        cl.reservation_time AS cl_reservation_time, 
+        cl.hour AS cl_hour, 
+        DATE_ADD(cl.reservation_time, INTERVAL cl.hour HOUR) AS cl_end_time, 
+        cl.chairs AS cl_chairs, 
+        cl.table_number AS cl_table_number, 
+        br.borrowed_date AS br_borrowed_date, 
+        br.due_date AS br_due_date,
+        CASE 
+            WHEN br.due_date < NOW() THEN 'overdue' 
+            ELSE 'borrowed' 
+        END AS borrowed_status,
+        mr.reservation_time AS mr_reservation_time,
+        mr.hour AS mr_hour,
+        DATE_ADD(mr.reservation_time, INTERVAL mr.hour HOUR) AS mr_end_time,
+        mr.chairs AS mr_chairs,
+        mr.table_number AS mr_table_number,
+        clr.ReservationTime AS clr_reservation_time,
+        clr.Duration AS clr_duration,
+        DATE_ADD(clr.ReservationTime, INTERVAL clr.Duration HOUR) AS clr_end_time,
+        clr.ComputerNumber AS clr_computer_number
+    FROM users u
+    LEFT JOIN coffeelibro_reservations cl ON u.id = cl.reserved_by
+    LEFT JOIN borrowed_books br ON u.id = br.user_id
+    LEFT JOIN museum_reservations mr ON u.id = mr.reserved_by
+    LEFT JOIN computer_laboratory clr ON u.id = clr.UserID
+";
+
+$result = $conn->query($sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -26,133 +54,204 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUPI Log Records</title>
+    <title>User Activity Log</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #fbc130;
-        }
-
-        .container {
-            width: 100%;
-            padding: 20px;
-        }
-
-        .header {
-            background-color: #007b70;
-            color: white;
-            padding: 10px;
+        .photo-icons {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .header img {
-            height: 50px;
-        }
-
-        .header .title {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .header .search-box {
-            display: flex;
-            align-items: center;
-        }
-
-        .header input[type="text"] {
-            padding: 5px;
-            border: none;
-            border-radius: 5px;
-        }
-
-        .header button {
-            background-color: #ccc;
-            border: none;
-            padding: 5px 10px;
-            margin-left: 5px;
-            border-radius: 5px;
+            padding: 10px 10px;
             cursor: pointer;
+            border-radius: 50px;
+        }
+    
+        .photo-icon {
+             display: flex;
+            height: 40px;
+            width: 40px;
+            margin-right: 18px;
         }
 
-        .user-info {
-            background-color: #fbc130;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-            font-weight: bold;
+        h1, h2 {
+            font-family: 'Quiapo', sans-serif;
+            font-size: 60px;
+            color: #070707;
+            margin: 0 0 0 150px;
+            margin-top: 30px;
+            margin-left: 50px;
         }
 
-        .user-info .name {
-            font-size: 20px;
+        form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .user-info .student-number {
-            font-size: 16px;
+        .table-container {
+            display: flex; /* Use flexbox for centering */
+            justify-content: center; /* Center content horizontally */
+            overflow: auto;
+            max-width: 95%;
+            margin: 0 auto; /* Center the container itself */
+            border: 1px solid black;
+            margin-bottom: -3-40px;
+            max-height: 100%;
         }
 
-        .log-records table {
-            width: 100%;
+        table {
+            width: 100%; /* Fixed width */
             border-collapse: collapse;
+            margin-left: 150px;
+            
         }
 
-        .log-records th, .log-records td {
-            border: 1px solid #ccc;
-            padding: 8px;
+        th, td {
+            border: 1px solid black;
+            padding: 15px;
             text-align: left;
+            font-size: 14px;
         }
 
-        .log-records th {
-            background-color: #007b70;
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr {
+            background-color: #f1f1f1;
+        }
+
+        .buttons {
+            margin: 20px 20px; /* Adjusted margin */
+            margin-left: auto; /* Move buttons to the right */
+            display: flex; /* Use flexbox for alignment */
+            justify-content: flex-end; /* Align items to the end (right side) */
+            margin-top: 10px;;
+        }
+
+        .buttons input, .buttons button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            border: 2px solid black;
+            border-radius: 5px;
+            background-color: #535151;
             color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .buttons input:hover, .buttons button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <img src="yupilogo.png" alt="YUPI Logo">
-            <div class="title">YUPI</div>
-            <div class="search-box">
-                <input type="text" placeholder="Search...">
-                <button>Search</button>
+    <header>
+        <div class="header-text">
+            <a href="admin_loginlandingpage.html">
+                <div class="logo-container"></div>
+            </a>
+            <div class="header-title">
+                <h1>YUPI</h1>
+                <h5>UP Mindanao Library Log</h5>
             </div>
         </div>
-        <div class="user-info">
-            <div class="name">Nebria, Quennie A.</div>
-            <div class="student-number">2023-05107</div>
+        <div class="photo-icons">
+          <img src="bell.png" class="photo-icon">
+          <img src="option.png" class="photo-icon">
         </div>
-        <div class="log-records">
-            <h2>Log Records</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Log In</th>
-                        <th>Log Out</th>
-                        <th>Place/s Visited</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($log_records as $record): ?>
-                        <tr>
-                            <td><?php echo $record['log_date']; ?></td>
-                            <td><?php echo $record['log_in']; ?></td>
-                            <td><?php echo $record['log_out']; ?></td>
-                            <td><?php echo $record['places_visited']; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <?php if (empty($log_records)): ?>
-                        <tr>
-                            <td colspan="4" style="text-align:center;">No records found</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+    </header>
+
+    <h2>User Activity Log</h2>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Cafe Libro Reservation Time</th>
+                <th>Cafe Libro Hours</th>
+                <th>Cafe Libro End Time</th>
+                <th>Cafe Libro Chairs</th>
+                <th>Cafe Libro Table Number</th>
+                <th>Museum Reservation Time</th>
+                <th>Museum Hours</th>
+                <th>Museum End Time</th>
+                <th>Museum Chairs</th>
+                <th>Museum Table Number</th>
+                <th>Computer Lab Reservation Time</th>
+                <th>Computer Lab Duration</th>
+                <th>Computer Lab End Time</th>
+                <th>Computer Number</th>
+                <th>Borrowed Date</th>
+                <th>Due Date</th>
+                
+            </tr>
+            <?php
+            if ($result->num_rows > 0) {
+                // Output data of each row
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row["user_id"] . "</td>";
+                    echo "<td>" . $row["user_name"] . "</td>";
+                    echo "<td>" . ($row["cl_reservation_time"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["cl_hour"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["cl_end_time"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["cl_chairs"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["cl_table_number"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["mr_reservation_time"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["mr_hour"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["mr_end_time"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["mr_chairs"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["mr_table_number"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["clr_reservation_time"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["clr_duration"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["clr_end_time"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["clr_computer_number"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["br_borrowed_date"] ?? 'N/A') . "</td>";
+                    echo "<td>" . ($row["br_due_date"] ?? 'N/A') . "</td>";
+                    
+                }
+            } else {
+                echo "<tr><td colspan='19'>No user activity found</td></tr>";
+            }
+            ?>
+        </table>
+       
     </div>
+            
+
+    <div class="buttons">          
+            <a href="admin_dashboard.html"><button>Back to Admin Dashboard</button></a>
+        </div>
+    <footer id="footer">
+        <div class="fleft">
+            <img src="Oble2.png" alt="Oblation2" class="oble2">
+            <img src="UPMInLogo.png" alt="UP Mindanao Logo" class="fupmlogo">
+            <img src="yupilogo.png" alt="YUPI Logo" class="fyupilogo">
+        </div>
+  
+        <div class="fmiddle">
+            <h3>University of the Philippines Mindanao</h3>
+            <h5>The University Library, UP Mindanao, Mintal, Tugbok District, Davao City, Philippines</h5>
+            <h5>Contact: (082)295-7025</h5>
+            <h5>Email: library.upmindanao@up.edu.ph</h5>
+  
+            <h5>&copy; 2024 University Library, University of the Philippines Mindanao. All Rights Reserved.</h5>
+        </div>
+  
+        <div class="fright">
+            <h4>Quick List</h4>
+            <a href="https://alarm.upmin.edu.ph/" >UP Mindanao ALARM</a>
+        </div>
+    </footer>
+
+    <script src="redirect.js"></script>
 </body>
 </html>
+
+<?php
+// Close connection
+$conn->close();
+?>

@@ -256,7 +256,7 @@ $conn->close();
             <input type="date" id="due-date" name="due_date" required>
             <div class="form-buttons">
                 <button type="submit" class="record">Record</button>
-                <button type="button" class="cancel" onclick="window.location.href='index.html'">Cancel</button>
+                <button type="button" class="cancel" onclick="window.location.href='reserve_seat.php'">Cancel</button>
             </div>
         </form>
     </div>

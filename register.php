@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['lastname'] = $lastname;
         $_SESSION['studentnumber'] = $studentnumber;
 
-        header("Location: rgtrlandingpage.php");
+        header("Location: userprofile.php");
         exit;
     } else {
         echo "Execute failed: " . $stmt->error;

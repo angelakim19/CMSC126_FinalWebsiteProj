@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Check if necessary session variables are set
 if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_SESSION['studentnumber'])) {
     header("Location: register.php");
     exit();
@@ -9,20 +10,48 @@ if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_
 $firstname = htmlspecialchars($_SESSION['firstname']);
 $lastname = htmlspecialchars($_SESSION['lastname']);
 $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
-// Include the database connection file
-include 'db.php';
+$profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSION['profile_picture']) : 'default_userp.png';
 
-// Get user ID from session
-$userId = $_SESSION['user_id']; // Update this to the correct session key if different
+$servername = "localhost"; 
+$username = "root"; 
+$dbpassword = ""; // Use the correct password for the MySQL root user
+$dbname = "registration_db";
 
-// Fetch user details
-$stmt = $conn->prepare("SELECT firstname, lastname, studentnumber FROM users WHERE id = ?");
-$stmt->bind_param("i", $userId);
+// Create connection
+$conn = new mysqli($servername, $username, $dbpassword, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch user data
+$studentnumber = $_SESSION['studentnumber'];
+$stmt = $conn->prepare("SELECT id, firstname, middlename, lastname, email, college, program, phonenumber, position, profile_picture FROM users WHERE studentnumber = ?");
+if ($stmt === false) {
+    die("Prepare failed: " . $conn->error);
+}
+$stmt->bind_param("s", $studentnumber);
 $stmt->execute();
-$stmt->bind_result($firstname, $lastname, $studentnumber);
-$stmt->fetch();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    $user_id = $user['id'];
+}
+
+// Fetch borrowed books
+$sql_borrowed_books = "SELECT book_title, author, borrowed_date, due_date, borrowed_status FROM borrowed_books WHERE user_id = ?";
+$stmt_borrowed_books = $conn->prepare($sql_borrowed_books);
+$stmt_borrowed_books->bind_param("i", $user_id);
+$stmt_borrowed_books->execute();
+$result_borrowed_books = $stmt_borrowed_books->get_result();
+
 $stmt->close();
+$stmt_borrowed_books->close();
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,19 +235,17 @@ $stmt->close();
         </div>
         <nav>
             <ul style="list-style: none; padding: 0; margin: 0; display: flex;">
-                <li class="about-us"><a href="aboutus.html" id="about-us-link">About Us</a></li>
-
+                <li class="about-us"><a href="#" id="about-us-link">ABOUT US</a></li>
                 <li><img src="default_userp.png" alt="User Photo" class="user-photo" id="user-photo"></li>
             </ul>
         </nav>
     </div>
     <div class="log-container">
-        <h2>Log Records</h2>
         <div class="user-info" style="display: flex; align-items: center; margin-bottom: 20px;">
             <img src="default_userp.png" alt="User Photo" class="user-photo" style="border: 5px solid white; margin-right: 20px;">
             <div>
-                <div style="font-size: 24px; font-weight: bold; color: black;"><?= $firstname . " " . $lastname ?></div>
-                <div style="font-size: 18px; color: black;"><?= $studentnumber ?></div>
+                <div style="font-size: 24px; font-weight: bold; color: black;"><?php echo $firstname . " " . $lastname; ?></div>
+                <div style="font-size: 18px; color: black;"><?php echo $studentnumber; ?></div>
             </div>
         </div>
         <div class="search-reservation">
@@ -228,42 +255,28 @@ $stmt->close();
             </div>
             <button class="reservation-button" onclick="window.location.href='student_reservation.php'">RESERVATIONS</button>
         </div>
+        <h2>Borrowed Book Records</h2>
         <table class="log-table">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Log In</th>
-                    <th>Log Out</th>
-                    <th>Space/s Visited</th>
-                    <th>Borrowed Book/s</th>
+                    <th>Book Title</th>
+                    <th>Author</th>
                     <th>Borrowed Date</th>
                     <th>Due Date</th>
-                    <th>Book/s Borrowed Status</th>
+                    <th>Borrowed Status</th>
                 </tr>
             </thead>
-            <tbody id="log-records-body">
+            <tbody id="log-body">
                 <?php
-                // Fetch log records
-                $stmt = $conn->prepare("SELECT log_date, log_in_time, log_out_time, spaces_visited, borrowed_books, borrowed_date, due_date, borrowed_status FROM log_records WHERE student_id = ?");
-                $stmt->bind_param("i", $userId);
-                $stmt->execute();
-                $stmt->bind_result($log_date, $log_in_time, $log_out_time, $spaces_visited, $borrowed_books, $borrowed_date, $due_date, $borrowed_status);
-
-                while ($stmt->fetch()) {
+                while ($row_borrowed_books = $result_borrowed_books->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>{$log_date}</td>";
-                    echo "<td>{$log_in_time}</td>";
-                    echo "<td>{$log_out_time}</td>";
-                    echo "<td>{$spaces_visited}</td>";
-                    echo "<td>{$borrowed_books}</td>";
-                    echo "<td>{$borrowed_date}</td>";
-                    echo "<td>{$due_date}</td>";
-                    echo "<td>{$borrowed_status}</td>";
+                    echo "<td>" . htmlspecialchars($row_borrowed_books['book_title']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row_borrowed_books['author']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row_borrowed_books['borrowed_date']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row_borrowed_books['due_date']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row_borrowed_books['borrowed_status']) . "</td>";
                     echo "</tr>";
                 }
-
-                $stmt->close();
-                $conn->close();
                 ?>
             </tbody>
         </table>
@@ -272,7 +285,7 @@ $stmt->close();
     <script>
         function searchRecords() {
             const query = document.getElementById('search-input').value.toLowerCase();
-            const rows = document.querySelectorAll('#log-records-body tr');
+            const rows = document.querySelectorAll('#log-body tr');
             rows.forEach(row => {
                 const cells = row.querySelectorAll('td');
                 const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(query));

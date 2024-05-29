@@ -241,7 +241,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-buttons">
                 <button type="submit" class="confirm">Confirm</button>
-                <button type="button" class="cancel" onclick="window.location.href='index.html'">Cancel</button>
+                <button type="button" class="cancel" onclick="window.location.href='reserve_seat.php'">Cancel</button>
             </div>
         </form>
     </div>

@@ -22,14 +22,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     exit();
                 }
                 break;
-            case 'delete':
-                // Handle delete operation
-                if(isset($_POST['selected_ids'])) {
-                    foreach($_POST['selected_ids'] as $selected_id) {
-                        // Perform delete operation for book with ID $selected_id
+                case 'delete':
+                    // Handle delete operation
+                    if(isset($_POST['selected_ids'])) {
+                        foreach($_POST['selected_ids'] as $selected_id) {
+                            // Perform delete operation for book with ID $selected_id
+                            $sql = "DELETE FROM borrowed_books WHERE id = $selected_id"; // Assuming your primary key column is 'id'
+                            // Execute the SQL query
+                            if ($conn->query($sql) !== TRUE) {
+                                // Handle errors here if necessary
+                                echo "Error deleting record: " . $conn->error;
+                            }
+                        }
                     }
-                }
-                break;
+                    break;
+                
             case 'add':
                 // Handle add operation
                 // Retrieve form data for adding a new book
@@ -51,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // After handling the operations, you can redirect the user to a different page
-header("Location: add_book.php");
+header("Location: borrowed_books.php");
 exit();
 
 $conn->close();

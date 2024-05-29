@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Check if necessary session variables are set
 if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_SESSION['studentnumber'])) {
     header("Location: register.php");
     exit();
@@ -9,20 +10,50 @@ if (!isset($_SESSION['firstname']) || !isset($_SESSION['lastname']) || !isset($_
 $firstname = htmlspecialchars($_SESSION['firstname']);
 $lastname = htmlspecialchars($_SESSION['lastname']);
 $studentnumber = htmlspecialchars($_SESSION['studentnumber']);
-// Include the database connection file
-include 'db.php';
+$profilePicture = isset($_SESSION['profile_picture']) ? htmlspecialchars($_SESSION['profile_picture']) : 'default_userp.png';
 
-// Get user ID from session
-$userId = $_SESSION['user_id']; // Update this to the correct session key if different
+$servername = "localhost"; 
+$username = "root"; 
+$dbpassword = ""; // Use the correct password for the MySQL root user
+$dbname = "registration_db";
 
-// Fetch user details
-$stmt = $conn->prepare("SELECT firstname, lastname, studentnumber FROM users WHERE id = ?");
-$stmt->bind_param("i", $userId);
+// Create connection
+$conn = new mysqli($servername, $username, $dbpassword, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch user data
+$stmt = $conn->prepare("SELECT id, firstname, middlename, lastname, email, college, program, phonenumber, position, profile_picture FROM users WHERE studentnumber = ?");
+if ($stmt === false) {
+    die("Prepare failed: " . $conn->error);
+}
+$stmt->bind_param("s", $studentnumber);
 $stmt->execute();
-$stmt->bind_result($firstname, $lastname, $studentnumber);
-$stmt->fetch();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    $user_id = $user['id'];
+} else {
+    die("User not found.");
+}
+
+// Fetch Lemito reservations
+$sql_lemito_events = "SELECT event_date, event_name, event_time, person FROM lemito_events WHERE event_id = ?";
+$stmt_lemito_events = $conn->prepare($sql_lemito_events);
+$stmt_lemito_events->bind_param("i", $user_id);
+$stmt_lemito_events->execute();
+$result_lemito_events = $stmt_lemito_events->get_result();
+
 $stmt->close();
+$stmt_lemito_events->close();
+$conn->close();
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -212,12 +243,12 @@ $stmt->close();
         </nav>
     </div>
     <div class="reservations-container">
-        <h2>Reservations</h2>
+        <h2>Lemito Reservations</h2>
         <div class="user-info" style="display: flex; align-items: center; margin-bottom: 20px;">
             <img src="default_userp.png" alt="User Photo" class="user-photo" style="border: 5px solid white; margin-right: 20px;">
             <div>
-                <div style="font-size: 24px; font-weight: bold; color: black;"><?= $firstname . " " . $lastname ?></div>
-                <div style="font-size: 18px; color: black;"><?= $studentnumber ?></div>
+                <div style="font-size: 24px; font-weight: bold; color: black;"><?php echo $firstname . " " . $lastname; ?></div>
+                <div style="font-size: 18px; color: black;"><?php echo $studentnumber; ?></div>
             </div>
         </div>
         <div class="search-reservation">
@@ -230,39 +261,23 @@ $stmt->close();
         <table class="reservations-table">
             <thead>
                 <tr>
-                    <th>Date Reservation was made</th>
-                    <th>Space</th>
                     <th>Event Name</th>
-                    <th>Organization</th>
-                    <th>Chosen Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
+                    <th>Event Date</th>
+                    <th>Event Time</th>
+                    <th>Person</th>
+
                 </tr>
             </thead>
             <tbody id="reservations-body">
                 <?php
-                $conn = new mysqli("localhost", "root", "", "registration_db");
-
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-
-                $sql = "SELECT reservation_date, space, event_name FROM reservations WHERE student_id = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $userId);
-                $stmt->execute();
-                $stmt->bind_result($reservation_date, $space, $event_name);
-
-                while ($stmt->fetch()) {
+                while ($row_lemito_events = $result_lemito_events->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>{$reservation_date}</td>";
-                    echo "<td>{$space}</td>";
-                    echo "<td>{$event_name}</td>";
+                    echo "<td>" . htmlspecialchars($row_lemito_events['event_name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row_lemito_events['event_date']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row_lemito_events['event_time']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row_lemito_events['person']) . "</td>";
                     echo "</tr>";
                 }
-
-                $stmt->close();
-                $conn->close();
                 ?>
             </tbody>
         </table>
